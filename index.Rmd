@@ -4,6 +4,7 @@ author: "Léon Caballer"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
+  html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -39,6 +40,7 @@ wrapped_full <-
   )
 wrapped_2023
 ```
+
 ```{r}
 popularity <- wrapped_2023 %>%
   select(track.name, track.popularity,
