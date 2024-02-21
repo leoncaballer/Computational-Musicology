@@ -20,7 +20,7 @@ library(ggrepel)
 
 ### Chart A
 
-```{r}
+```{r, echo=FALSE}
 wrapped_2018 <- get_playlist_audio_features("", "15qQT7hCKC7xSsb43llL6P")
 wrapped_2019 <- get_playlist_audio_features("", "2B1zQ9cHIIykfzNNPC0Qlp")
 wrapped_2020 <- get_playlist_audio_features("", "1RaBvQSIMaFyQOnT1FJcEh")
@@ -40,7 +40,7 @@ wrapped_full <-
 wrapped_2023
 ```
 
-```{r}
+```{r, echo=FALSE}
 popularity <- wrapped_2023 %>%
   select(track.name, track.popularity,
          acousticness, danceability, energy, 
@@ -62,6 +62,10 @@ plot <- plot +
                filter(attribute == "liveness" & track.name == "Fog (Again) - Live"),
             aes(x = rating, y = track.popularity, label = track.name),
             vjust = -1, hjust = 1, size = 3, color = "black") +
+  geom_text(data = popularity %>% 
+               filter(attribute == "speechiness" & track.name == "DOGTOOTH"),
+            aes(x = rating, y = track.popularity, label = track.name),
+            vjust = -1, hjust = 1, size = 3, color = "black")
   geom_text(data = popularity %>% 
                filter(attribute == "speechiness" & track.name == "DOGTOOTH"),
             aes(x = rating, y = track.popularity, label = track.name),
