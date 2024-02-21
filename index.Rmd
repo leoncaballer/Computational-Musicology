@@ -1,9 +1,8 @@
 ---
 title: "Wrap it up"
-author: "Léon Caballer"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: columns
+    storyboard: true
 ---
 
 ```{r setup, include=FALSE}
@@ -12,15 +11,15 @@ library(spotifyr)
 library(tidyverse)
 library(plotly)
 library(ggrepel)
+library(compmus)
 ```
 
-# Overview
+Column {data-width=650}
+-----------------------------------------------------------------------
 
-## Column
+### Variabelen
 
-### Chart A
-
-```{r, echo=FALSE}
+```{r, results='hide'}
 wrapped_2018 <- get_playlist_audio_features("", "15qQT7hCKC7xSsb43llL6P")
 wrapped_2019 <- get_playlist_audio_features("", "2B1zQ9cHIIykfzNNPC0Qlp")
 wrapped_2020 <- get_playlist_audio_features("", "1RaBvQSIMaFyQOnT1FJcEh")
@@ -37,10 +36,7 @@ wrapped_full <-
     wrapped_2022 |> mutate(wrapped_year="2022"),
     wrapped_2023 |> mutate(wrapped_year="2023")
   )
-wrapped_2023
-```
 
-```{r, echo=FALSE}
 popularity <- wrapped_2023 %>%
   select(track.name, track.popularity,
          acousticness, danceability, energy, 
@@ -67,39 +63,113 @@ plot <- plot +
             aes(x = rating, y = track.popularity, label = track.name),
             vjust = -1, hjust = 1, size = 3, color = "black")
   geom_text(data = popularity %>% 
-               filter(attribute == "speechiness" & track.name == "DOGTOOTH"),
+               filter(attribute == "valence" & track.name == "The Appeal Of Permanence"),
             aes(x = rating, y = track.popularity, label = track.name),
             vjust = -1, hjust = 1, size = 3, color = "black")
 
 plot
 ```
 
-## Column
+***
+
+LEON CABALLER LEON CABALLER
+
 
 ### Chart B
 
 ```{r}
+enon <-
+  get_tidy_audio_analysis("6F3TZeOG2uKDNDbUgoOE3S") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
 
+enon |>
+  mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |>
+  compmus_gather_chroma() |> 
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = pitch_class,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
+  theme_minimal() +
+  scale_fill_viridis_c()
 ```
 
 ### Chart C
 
 ```{r}
+## The Tallis Scholars
+tallis <-
+  get_tidy_audio_analysis("2J3Mmybwue0jyQ0UVMYurH") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
+## La Chapelle Royale
+chapelle <-
+  get_tidy_audio_analysis("4ccw2IcnFt1Jv9LqQCOYDi") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
+## The Cambridge Singers
+cambridge <-
+  get_tidy_audio_analysis("54cAT1TCFaZbLOB2i1y61h") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
 
+
+## Oxford Camerata
+oxford <-
+  get_tidy_audio_analysis("5QyUsMY40MQ1VebZXSaonU") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
+## Chanticleer
+chanticleer <-
+  get_tidy_audio_analysis("1bocG1N8LM7MSgj9T1n3XH") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
+
+
+## The Hilliard Ensemble
+hilliard <-
+  get_tidy_audio_analysis("2rXEyq50luqaFNC9DkcU6k") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
+## The Gabrieli Consort
+gabrieli <-
+  get_tidy_audio_analysis("4NnJ4Jes8a8mQUfXhwuITx") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
+
+compmus_long_distance(
+  tallis |> mutate(pitches = map(pitches, compmus_normalise, "chebyshev")),
+  chapelle |> mutate(pitches = map(pitches, compmus_normalise, "chebyshev")),
+  feature = pitches,
+  method = "euclidean"
+) |>
+  ggplot(
+    aes(
+      x = xstart + xduration / 2,
+      width = xduration,
+      y = ystart + yduration / 2,
+      height = yduration,
+      fill = d
+    )
+  ) +
+  geom_tile() +
+  coord_equal() +
+  labs(x = "The Tallis Scholars", y = "La Chapelle Royale") +
+  theme_minimal() +
+  scale_fill_viridis_c(guide = NULL)
 ```
 
-# Details
-
-### Chart AA
-
-```{r}
-
-```
-
-# Data
-
-### Chart BB
-
-```{r}
-
-```
