@@ -14,7 +14,7 @@ library(ggrepel)
 library(compmus)
 ```
 
-Column {data-width=650}
+Dit is hem jongens {data-width=650}
 -----------------------------------------------------------------------
 
 ### Variabelen
