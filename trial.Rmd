@@ -242,6 +242,13 @@ Appeal |>
 ### Chart C
 
 ```{r}
+## Woodpecker
+woodpecker <-
+  get_tidy_audio_analysis("4UO1pfxi5fDbxshrwwznJ2") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
+
 ## The Tallis Scholars
 tallis <-
   get_tidy_audio_analysis("2J3Mmybwue0jyQ0UVMYurH") |>
@@ -290,8 +297,8 @@ gabrieli <-
   select(start, duration, pitches)
 
 compmus_long_distance(
-  tallis |> mutate(pitches = map(pitches, compmus_normalise, "chebyshev")),
-  chapelle |> mutate(pitches = map(pitches, compmus_normalise, "chebyshev")),
+  woodpecker |> mutate(pitches = map(pitches, compmus_normalise, "chebyshev")),
+  woodpecker |> mutate(pitches = map(pitches, compmus_normalise, "chebyshev")),
   feature = pitches,
   method = "euclidean"
 ) |>
@@ -304,9 +311,9 @@ compmus_long_distance(
       fill = d
     )
   ) +
+  labs(x="YO", y="YO")
   geom_tile() +
   coord_equal() +
-  labs(x = "The Tallis Scholars", y = "La Chapelle Royale") +
   theme_minimal() +
   scale_fill_viridis_c(guide = NULL)
 ```
