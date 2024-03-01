@@ -311,7 +311,7 @@ compmus_long_distance(
       fill = d
     )
   ) +
-  labs(x="YO", y="YO")
+  labs(x="YO", y="YO") +
   geom_tile() +
   coord_equal() +
   theme_minimal() +

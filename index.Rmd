@@ -2,7 +2,6 @@
 title: "Wrap it up"
 output: 
   flexdashboard::flex_dashboard:
-    
 ---
 
 ```{r setup, include=FALSE, results='hide'}
@@ -13,6 +12,8 @@ library(plotly)
 library(ggrepel)
 library(compmus)
 library(purrr)
+
+options(knitr.duplicate.label = "allow")
 ```
 
 ```{r, results='hide'}
@@ -42,78 +43,15 @@ full_2022 <- bind_rows(
 
 full_2022
 ```
+# Interesting songs
 
-What a poser.
-===================================== 
+## Inputs {.sidebar}
 
+Here you'll find the Self-Similarity Matrix and Cepstogram of the track 'Bodysnatchers', from the 2007 album 'In Rainbows', by Radiohead. This is a track that is characterized by loud guitars, bass, and hectic drums. This is represented in the Cepstogram, where the first timbre component (loudness) is almost entirely colored yellow or green-ish. The return to blue at around 120 seconds for the third and seventh timbre component is explained by a relatively calm part of the song. The loudness of the song is also characterized by the Self-Similarity Matrix, which is almost entirely dark blue, except for the final few seconds, where it switches over to yellow. The final few seconds of the song are complete silence, which contrasts heavily with the loudness of the previous parts of the song, thus explaining a similar contrast in the Matrix.
 
-Inputs {.sidebar}
--------------------------------------
+## Wrapped Attributes {.tabset}
 
-
-Wrapped Attributes {.tabset}
--------------------------------------
-
-### Introduction 
-
-```{r, results='hide'}
-full_2022 |>                    
-  mutate(
-    mode = ifelse(mode == 0, "Minor", "Major")
-  ) |>
-  ggplot(                     
-    aes(
-      x = valence,
-      y = energy,
-      size = loudness,
-      colour = mode
-    )
-  ) +
-  geom_point() +              
-  geom_rug(linewidth = 0.1) + 
-  facet_wrap(~ year) +    
-  scale_x_continuous(         
-    limits = c(0, 1),
-    breaks = c(0, 0.50, 1),   
-    minor_breaks = NULL       
-  ) +
-  scale_y_continuous(         
-    limits = c(0, 1),
-    breaks = c(0, 0.50, 1),
-    minor_breaks = NULL
-  ) +
-  scale_colour_brewer(        
-    type = "qual",            
-    palette = "Paired"        
-  ) +
-  scale_size_continuous(      
-    trans = "exp",            
-    guide = "none"            
-  ) +
-  theme_light() +             
-  labs(                       
-    x = "Valence",
-    y = "Energy",
-    colour = "Month",
-    size = "Loudness"
-  ) 
-```
-### March
-
-
-Interesting songs
-===================================== 
-
-
-Inputs {.sidebar}
--------------------------------------
-
-
-Wrapped Attributes {.tabset}
--------------------------------------
-
-
-### Introduction 
+### Self Similarity Matrix
 
 ```{r}
 bodysnatchers <-
@@ -153,20 +91,500 @@ bodysnatchers |>
   theme_classic() +
   labs(x = "", y = "")
 ```
+
+### Cepstrum Thingy
+
 ```{r}
-# bodysnatchers |>
-#   compmus_gather_timbre() |>
-#   ggplot(
-#     aes(
-#       x = start + duration / 2,
-#       width = duration,
-#       y = basis,
-#       fill = value
-#     )
-#   ) +
-#   geom_tile() +
-#   labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
-#   scale_fill_viridis_c() +                              
-#   theme_classic()
+bodysnatchers |>
+  compmus_gather_timbre() |>
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = basis,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
+  scale_fill_viridis_c() +
+  theme_classic()
 ```
 
+# First Things First
+
+## Inputs {.sidebar}
+
+This is supposed to be my introductory page, but I kind of changed around my corpus a bit, so I'll have to rewrite this as well. Stay tuned! 
+
+Column 
+-------------------------------------
+    
+#### In Rainbows
+    
+```{r picture, echo = F, fig.cap = "Radiohead", out.width = '100%'}
+knitr::include_graphics("1f3fcd1922743e6f9159a9ccdf1dbdd9.1000x1000x1.png")
+```
+
+#### In Rainbows
+
+```{r picture2, echo = F, fig.cap = "Radiohead 2", out.width = '100%'}
+knitr::include_graphics("1f3fcd1922743e6f9159a9ccdf1dbdd9.1000x1000x1.png")
+```
+
+Column
+-------------------------------------
+   
+#### In Rainbows
+
+```{r picture3, echo = F, fig.cap = "Radiohead 3", out.width = '100%'}
+knitr::include_graphics("1f3fcd1922743e6f9159a9ccdf1dbdd9.1000x1000x1.png")
+```
+ 
+#### In Rainbows
+
+```{r picture4, echo = F, fig.cap = "Radiohead 4", out.width = '100%'}
+knitr::include_graphics("1f3fcd1922743e6f9159a9ccdf1dbdd9.1000x1000x1.png")
+```   
+
+# What a poser.
+
+## Inputs {.sidebar}
+
+In the following plots, you'll be able to see the characteristics of the music I discovered during the month of April until December. I chose to convey four attributes that Spotify keeps track of to represent my music discovery behavior. First off, I chose valence (the musical positiveness that a track conveys), energy, loudness, and popularity (determined by several factors, including the number of streams, user engagement, and how recently the song was released). These attributes are presented on the x-axis, y-axis, by size, and by color respectively. I chose these four attributes specifically because, in my opinion, they are the most closely related to my own emotions during the time that I discovered a particular song. This way I'll be able to make meaningful connections and find possible patterns in my music discovery behavior.
+
+## Wrapped Attributes {.tabset}
+
+### Introduction
+
+In due time I will introduce and explain every visualization on this page. Stay tuned!
+
+### March 2022
+
+```{r, results='hide'}
+plot <- march_2022 |>                    
+  mutate(
+    mode = ifelse(mode == 0, "Minor", "Major")
+  ) |>
+  ggplot(                     
+    aes(
+      x = valence,
+      y = energy,
+      size = loudness,
+      colour = track.popularity
+    )
+  ) +
+  geom_point() +              
+  geom_rug(linewidth = 0.1) + 
+  scale_x_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),   
+    minor_breaks = NULL       
+  ) +
+  scale_y_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),
+    minor_breaks = NULL
+  ) +
+  scale_colour_viridis_c() +
+  scale_size_continuous(
+    trans="exp",
+    guide="none"
+  ) +
+  theme_light() +             
+  labs(                       
+    x = "Valence",
+    y = "Energy",
+    colour = "Popularity",
+    size = "Loudness"
+  )
+
+plot
+```
+
+### April 2022
+
+```{r, results='hide'}
+plot <- april_2022 |>                    
+  mutate(
+    mode = ifelse(mode == 0, "Minor", "Major")
+  ) |>
+  ggplot(                     
+    aes(
+      x = valence,
+      y = energy,
+      size = loudness,
+      colour = track.popularity
+    )
+  ) +
+  geom_point() +              
+  geom_rug(linewidth = 0.1) + 
+  scale_x_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),   
+    minor_breaks = NULL       
+  ) +
+  scale_y_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),
+    minor_breaks = NULL
+  ) +
+  scale_colour_viridis_c() +
+  scale_size_continuous(
+    trans="exp",
+    guide="none"
+  ) +
+  theme_light() +             
+  labs(                       
+    x = "Valence",
+    y = "Energy",
+    colour = "Popularity",
+    size = "Loudness"
+  )
+
+plot
+```
+
+### May 2022
+
+```{r, results='hide'}
+plot <- may_2022 |>                    
+  mutate(
+    mode = ifelse(mode == 0, "Minor", "Major")
+  ) |>
+  ggplot(                     
+    aes(
+      x = valence,
+      y = energy,
+      size = loudness,
+      colour = track.popularity
+    )
+  ) +
+  geom_point() +              
+  geom_rug(linewidth = 0.1) + 
+  scale_x_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),   
+    minor_breaks = NULL       
+  ) +
+  scale_y_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),
+    minor_breaks = NULL
+  ) +
+  scale_colour_viridis_c() +
+  scale_size_continuous(
+    trans="exp",
+    guide="none"
+  ) +
+  theme_light() +             
+  labs(                       
+    x = "Valence",
+    y = "Energy",
+    colour = "Popularity",
+    size = "Loudness"
+  )
+
+plot
+```
+
+### June 2022
+
+```{r, results='hide'}
+plot <- june_2022 |>                    
+  mutate(
+    mode = ifelse(mode == 0, "Minor", "Major")
+  ) |>
+  ggplot(                     
+    aes(
+      x = valence,
+      y = energy,
+      size = loudness,
+      colour = track.popularity
+    )
+  ) +
+  geom_point() +              
+  geom_rug(linewidth = 0.1) + 
+  scale_x_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),   
+    minor_breaks = NULL       
+  ) +
+  scale_y_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),
+    minor_breaks = NULL
+  ) +
+  scale_colour_viridis_c() +
+  scale_size_continuous(
+    trans="exp",
+    guide="none"
+  ) +
+  theme_light() +             
+  labs(                       
+    x = "Valence",
+    y = "Energy",
+    colour = "Popularity",
+    size = "Loudness"
+  )
+
+plot
+```
+
+### July 2022
+
+```{r, results='hide'}
+plot <- july_2022 |>                    
+  mutate(
+    mode = ifelse(mode == 0, "Minor", "Major")
+  ) |>
+  ggplot(                     
+    aes(
+      x = valence,
+      y = energy,
+      size = loudness,
+      colour = track.popularity
+    )
+  ) +
+  geom_point() +              
+  geom_rug(linewidth = 0.1) + 
+  scale_x_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),   
+    minor_breaks = NULL       
+  ) +
+  scale_y_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),
+    minor_breaks = NULL
+  ) +
+  scale_colour_viridis_c() +
+  scale_size_continuous(
+    trans="exp",
+    guide="none"
+  ) +
+  theme_light() +             
+  labs(                       
+    x = "Valence",
+    y = "Energy",
+    colour = "Popularity",
+    size = "Loudness"
+  )
+
+plot
+```
+
+### August 2022
+
+```{r, results='hide'}
+plot <- august_2022 |>                    
+  mutate(
+    mode = ifelse(mode == 0, "Minor", "Major")
+  ) |>
+  ggplot(                     
+    aes(
+      x = valence,
+      y = energy,
+      size = loudness,
+      colour = track.popularity
+    )
+  ) +
+  geom_point() +              
+  geom_rug(linewidth = 0.1) + 
+  scale_x_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),   
+    minor_breaks = NULL       
+  ) +
+  scale_y_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),
+    minor_breaks = NULL
+  ) +
+  scale_colour_viridis_c() +
+  scale_size_continuous(
+    trans="exp",
+    guide="none"
+  ) +
+  theme_light() +             
+  labs(                       
+    x = "Valence",
+    y = "Energy",
+    colour = "Popularity",
+    size = "Loudness"
+  )
+
+plot
+```
+
+### September 2022
+
+```{r, results='hide'}
+plot <- september_2022 |>                    
+  mutate(
+    mode = ifelse(mode == 0, "Minor", "Major")
+  ) |>
+  ggplot(                     
+    aes(
+      x = valence,
+      y = energy,
+      size = loudness,
+      colour = track.popularity
+    )
+  ) +
+  geom_point() +              
+  geom_rug(linewidth = 0.1) + 
+  scale_x_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),   
+    minor_breaks = NULL       
+  ) +
+  scale_y_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),
+    minor_breaks = NULL
+  ) +
+  scale_colour_viridis_c() +
+  scale_size_continuous(
+    trans="exp",
+    guide="none"
+  ) +
+  theme_light() +             
+  labs(                       
+    x = "Valence",
+    y = "Energy",
+    colour = "Popularity",
+    size = "Loudness"
+  )
+
+plot
+```
+
+### October 2022
+
+```{r, results='hide'}
+plot <- october_2022 |>                    
+  mutate(
+    mode = ifelse(mode == 0, "Minor", "Major")
+  ) |>
+  ggplot(                     
+    aes(
+      x = valence,
+      y = energy,
+      size = loudness,
+      colour = track.popularity
+    )
+  ) +
+  geom_point() +              
+  geom_rug(linewidth = 0.1) + 
+  scale_x_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),   
+    minor_breaks = NULL       
+  ) +
+  scale_y_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),
+    minor_breaks = NULL
+  ) +
+  scale_colour_viridis_c() +
+  scale_size_continuous(
+    trans="exp",
+    guide="none"
+  ) +
+  theme_light() +             
+  labs(                       
+    x = "Valence",
+    y = "Energy",
+    colour = "Popularity",
+    size = "Loudness"
+  )
+
+plot
+```
+
+### November 2022
+
+```{r, results='hide'}
+plot <- november_2022 |>                    
+  mutate(
+    mode = ifelse(mode == 0, "Minor", "Major")
+  ) |>
+  ggplot(                     
+    aes(
+      x = valence,
+      y = energy,
+      size = loudness,
+      colour = track.popularity
+    )
+  ) +
+  geom_point() +              
+  geom_rug(linewidth = 0.1) + 
+  scale_x_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),   
+    minor_breaks = NULL       
+  ) +
+  scale_y_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),
+    minor_breaks = NULL
+  ) +
+  scale_colour_viridis_c() +
+  scale_size_continuous(
+    trans="exp",
+    guide="none"
+  ) +
+  theme_light() +             
+  labs(                       
+    x = "Valence",
+    y = "Energy",
+    colour = "Popularity",
+    size = "Loudness"
+  )
+
+plot
+```
+
+### December 2022
+
+```{r, results='hide'}
+plot <- december_2022 |>                    
+  mutate(
+    mode = ifelse(mode == 0, "Minor", "Major")
+  ) |>
+  ggplot(                     
+    aes(
+      x = valence,
+      y = energy,
+      size = loudness,
+      colour = track.popularity
+    )
+  ) +
+  geom_point() +              
+  geom_rug(linewidth = 0.1) + 
+  scale_x_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),   
+    minor_breaks = NULL       
+  ) +
+  scale_y_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),
+    minor_breaks = NULL
+  ) +
+  scale_colour_viridis_c() +
+  scale_size_continuous(
+    trans="exp",
+    guide="none"
+  ) +
+  theme_light() +             
+  labs(                       
+    x = "Valence",
+    y = "Energy",
+    colour = "Popularity",
+    size = "Loudness"
+  )
+
+plot
+```
