@@ -43,73 +43,6 @@ full_2022 <- bind_rows(
 
 full_2022
 ```
-# Interesting songs
-
-## Inputs {.sidebar}
-
-Here you'll find the Self-Similarity Matrix and Cepstogram of the track 'Bodysnatchers', from the 2007 album 'In Rainbows', by Radiohead. This is a track that is characterized by loud guitars, bass, and hectic drums. This is represented in the Cepstogram, where the first timbre component (loudness) is almost entirely colored yellow or green-ish. The return to blue at around 120 seconds for the third and seventh timbre component is explained by a relatively calm part of the song. The loudness of the song is also characterized by the Self-Similarity Matrix, which is almost entirely dark blue, except for the final few seconds, where it switches over to yellow. The final few seconds of the song are complete silence, which contrasts heavily with the loudness of the previous parts of the song, thus explaining a similar contrast in the Matrix.
-
-## Wrapped Attributes {.tabset}
-
-### Self Similarity Matrix
-
-```{r}
-bodysnatchers <-
-  get_tidy_audio_analysis("4pWIwnnqx8k01fuF95UMIg") |> # Change URI.
-  compmus_align(bars, segments) |>                     # Change `bars`
-  select(bars) |>                                      #   in all three
-  unnest(bars) |>                                      #   of these lines.
-  mutate(
-    pitches =
-      map(segments,
-        compmus_summarise, pitches,
-        method = "rms", norm = "euclidean"              # Change summary & norm.
-      )
-  ) |>
-  mutate(
-    timbre =
-      map(segments,
-        compmus_summarise, timbre,
-        method = "rms", norm = "euclidean"              # Change summary & norm.
-      )
-  )
-
-bodysnatchers |>
-  compmus_self_similarity(timbre, "cosine") |> 
-  ggplot(
-    aes(
-      x = xstart + xduration / 2,
-      width = xduration,
-      y = ystart + yduration / 2,
-      height = yduration,
-      fill = d
-    )
-  ) +
-  geom_tile() +
-  coord_fixed() +
-  scale_fill_viridis_c(guide = "none") +
-  theme_classic() +
-  labs(x = "", y = "")
-```
-
-### Cepstrum Thingy
-
-```{r}
-bodysnatchers |>
-  compmus_gather_timbre() |>
-  ggplot(
-    aes(
-      x = start + duration / 2,
-      width = duration,
-      y = basis,
-      fill = value
-    )
-  ) +
-  geom_tile() +
-  labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
-  scale_fill_viridis_c() +
-  theme_classic()
-```
 
 # First Things First
 
@@ -153,7 +86,7 @@ knitr::include_graphics("1f3fcd1922743e6f9159a9ccdf1dbdd9.1000x1000x1.png")
 
 In the following plots, you'll be able to see the characteristics of the music I discovered during the month of April until December. I chose to convey four attributes that Spotify keeps track of to represent my music discovery behavior. First off, I chose valence (the musical positiveness that a track conveys), energy, loudness, and popularity (determined by several factors, including the number of streams, user engagement, and how recently the song was released). These attributes are presented on the x-axis, y-axis, by size, and by color respectively. I chose these four attributes specifically because, in my opinion, they are the most closely related to my own emotions during the time that I discovered a particular song. This way I'll be able to make meaningful connections and find possible patterns in my music discovery behavior.
 
-## Wrapped Attributes {.tabset}
+## Wrapped Attributes {.tabset .tabset-fade}
 
 ### Introduction
 
@@ -587,4 +520,106 @@ plot <- december_2022 |>
   )
 
 plot
+```
+
+# Chroma Features
+
+## Inputs {.sidebar}
+
+Here you'll find some Chroma Features and such.
+
+## Wrapped Attributes {.tabset}
+
+### Just by Radiohead
+
+```{r, results='hide'}
+Just <-
+  get_tidy_audio_analysis("1dyTcli07c77mtQK3ahUZR") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
+
+Just |>
+  mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |>
+  compmus_gather_chroma() |> 
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = pitch_class,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
+  theme_minimal() +
+  scale_fill_viridis_c()
+```
+
+# Timbre Features
+
+## Inputs {.sidebar}
+
+Here you'll find the Self-Similarity Matrix and Cepstogram of the track 'Bodysnatchers', from the 2007 album 'In Rainbows', by Radiohead. This is a track that is characterized by loud guitars, bass, and hectic drums. This is represented in the Cepstogram, where the first timbre component (loudness) is almost entirely colored yellow or green-ish. The return to blue at around 120 seconds for the third and seventh timbre component is explained by a relatively calm part of the song. The loudness of the song is also characterized by the Self-Similarity Matrix, which is almost entirely dark blue, except for the final few seconds, where it switches over to yellow. The final few seconds of the song are complete silence, which contrasts heavily with the loudness of the previous parts of the song, thus explaining a similar contrast in the Matrix.
+
+## Wrapped Attributes {.tabset}
+
+### Self Similarity Matrix
+
+```{r}
+bodysnatchers <-
+  get_tidy_audio_analysis("4pWIwnnqx8k01fuF95UMIg") |> # Change URI.
+  compmus_align(bars, segments) |>                     # Change `bars`
+  select(bars) |>                                      #   in all three
+  unnest(bars) |>                                      #   of these lines.
+  mutate(
+    pitches =
+      map(segments,
+        compmus_summarise, pitches,
+        method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  ) |>
+  mutate(
+    timbre =
+      map(segments,
+        compmus_summarise, timbre,
+        method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  )
+
+bodysnatchers |>
+  compmus_self_similarity(timbre, "cosine") |> 
+  ggplot(
+    aes(
+      x = xstart + xduration / 2,
+      width = xduration,
+      y = ystart + yduration / 2,
+      height = yduration,
+      fill = d
+    )
+  ) +
+  geom_tile() +
+  coord_fixed() +
+  scale_fill_viridis_c(guide = "none") +
+  theme_classic() +
+  labs(x = "", y = "")
+```
+
+### Cepstrum Thingy
+
+```{r}
+bodysnatchers |>
+  compmus_gather_timbre() |>
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = basis,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
+  scale_fill_viridis_c() +
+  theme_classic()
 ```
