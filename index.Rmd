@@ -267,16 +267,9 @@ ggplot(loudness_by_year_month, aes(x = month, y = mean_loudness, fill = factor(y
   theme_minimal() +
   theme(legend.position = "top", 
         axis.text.x = element_text(angle = 45, hjust = 1))
-
-# # Identify top N songs with the highest valence for each month and year
-# top_n_loudness_songs_by_year <- combined_data %>%
-#   group_by(year, month) %>%
-#   slice_max(order_by = loudness, n = 1) %>%
-#   select(year, month, track.name, loudness)
-# 
-# # Display the top N songs with the highest valence from every month and year
-# print(top_n_loudness_songs_by_year)
 ```
+
+On average, I listened to louder music in 2022 than 2023. In the months of April, July, and November we can find the highest difference between loudness in 2022 and 2023, so let's take a look at some songs of that period. 
 
 #### Valence 
 
@@ -300,20 +293,13 @@ ggplot(valence_by_year_month, aes(x = month, y = mean_valence, fill = factor(yea
   theme_minimal() +
   theme(legend.position = "top", 
         axis.text.x = element_text(angle = 45, hjust = 1))
-
-# # Identify top N songs with the highest valence for each month and year
-# top_n_valence_songs_by_year <- combined_data %>%
-#   group_by(year, month) %>%
-#   slice_max(order_by = valence, n = 1) %>%
-#   select(year, month, track.name, valence)
-# 
-# # Display the top N songs with the highest valence from every month and year
-# print(top_n_valence_songs_by_year)
 ```
+
+There seems to be a pattern of growth in the valence of the songs I discovered over time, with an apparent peak in the summer months. Could this correlate with the nice weather that's common in those months or is this simply a coincidence? 
 
 #### Popularity 
 
-```{r}
+```{r, results='hide'}
 # Group by year and month, and calculate mean valence
 popularity_by_year_month <- combined_data %>%
   group_by(year, month) %>%
@@ -333,56 +319,29 @@ ggplot(popularity_by_year_month, aes(x = month, y = mean_popularity, fill = fact
   theme_minimal() +
   theme(legend.position = "top", 
         axis.text.x = element_text(angle = 45, hjust = 1))
-
-# # Identify top N songs with the highest valence for each month and year
-# top_n_popularity_songs_by_year <- combined_data %>%
-#   group_by(year, month) %>%
-#   slice_max(order_by = track.popularity, n = 1) %>%
-#   select(year, month, track.name, track.popularity)
-# 
-# # Display the top N songs with the highest valence from every month and year
-# print(top_n_popularity_songs_by_year)
 ```
+
+I view the popularity of a song as a particularly telling attribute, as it's significantly easier to discover a song that's more popular. Popular songs tend to also get a lot of time on the radio and are pushed to some of Spotify's biggest playlists. In general, the popularity of songs I discovered in 2022 was higher than that of songs I discovered in 2023. Did I willingly discover more niche songs in the course of that year or was this a coincidence?
 
 ### March 2022
 
 ```{r, results='hide'}
-plot <- march_2022 |>                    
-  mutate(
-    mode = ifelse(mode == 0, "Minor", "Major")
-  ) |>
-  ggplot(                     
-    aes(
-      x = valence,
-      y = energy,
-      size = loudness,
-      colour = track.popularity
-    )
-  ) +
-  geom_point() +              
-  geom_rug(linewidth = 0.1) + 
-  scale_x_continuous(         
-    limits = c(0, 1),
-    breaks = c(0, 0.50, 1),   
-    minor_breaks = NULL       
-  ) +
-  scale_y_continuous(         
-    limits = c(0, 1),
-    breaks = c(0, 0.50, 1),
-    minor_breaks = NULL
-  ) +
-  scale_colour_viridis_c() +
-  scale_size_continuous(
-    trans="exp",
-    guide="none"
-  ) +
-  theme_light() +             
-  labs(                       
-    x = "Valence",
-    y = "Energy",
-    colour = "Popularity",
-    size = "Loudness"
-  )
+march_2023_data <- combined_data %>% filter(year == 2023, month == "march")
+
+# Select the top 5 loudest songs in March 2023
+top5_loudest_march_2023 <- march_2023_data %>%
+  arrange(desc(loudness)) %>%
+  head(5)
+
+# Convert "track.name" to a factor with the desired order
+top5_loudest_march_2023$track.name <- factor(top5_loudest_march_2023$track.name, levels = top5_loudest_march_2023$track.name)
+
+plot <- plot_ly(data = top5_loudest_march_2023, x = ~track.name, y = ~loudness,
+        type = "scatter", mode = "markers+text", marker = list(size = 10)) %>%
+  layout(title = "Top 5 Loudest Songs of March 2023",
+         yaxis = list(title = "Loudness"),
+         legend = list(title = "Year"),
+         hovermode = "closest")
 
 plot
 ```
