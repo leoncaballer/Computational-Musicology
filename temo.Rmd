@@ -1,0 +1,856 @@
+---
+title: "Wrap it up"
+output: 
+  flexdashboard::flex_dashboard:
+---
+
+```{r setup, include=FALSE, results='hide'}
+library(flexdashboard)
+library(spotifyr)
+library(tidyverse)
+library(plotly)
+library(ggrepel)
+library(compmus)
+library(purrr)
+library(htmlwidgets)
+library(highcharter)
+
+
+options(knitr.duplicate.label = "allow")
+```
+
+```{r, results='hide'}
+march_2022 <- get_playlist_audio_features("", "5GcVdmYmopYD63VA3Jlrdg")
+april_2022 <- get_playlist_audio_features("", "0D8lpYsC42ARjmUeiJRPbX")
+may_2022 <- get_playlist_audio_features("", "10gcAHZbtdKmPEsq2sfDXV")
+june_2022 <- get_playlist_audio_features("", "60KrNVuCol1SmUIUl0afWe")
+july_2022 <- get_playlist_audio_features("", "2s7WBylfTXxMoK43n0yQH4")
+august_2022 <- get_playlist_audio_features("", "1iXOgnOcpvoiETQW4yJ2iX")
+september_2022 <- get_playlist_audio_features("", "5eqF7aFUfXKmNN9yliTlXL")
+october_2022 <- get_playlist_audio_features("", "483hVg9hepeZL7JjFXIpMz")
+november_2022 <- get_playlist_audio_features("", "6zYA9NzOPb9nYjV21KNKsD")
+december_2022 <- get_playlist_audio_features("", "5P8jALdx9bXJQMTR0dO5Xd")
+
+january_2023 <- get_playlist_audio_features("", "52Rw1EdQzCpD9SOJltAX9J")
+february_2023 <- get_playlist_audio_features("", "3riZOHbg5ZUsDkxUvcSCGu")
+march_2023 <- get_playlist_audio_features("", "0dRC9C0pYDcpPD0sZDgIyx")
+april_2023 <- get_playlist_audio_features("", "0HcdxosjfoDULOH2jaLQco")
+may_2023 <- get_playlist_audio_features("", "6DsIWTO4w6sG0XMctJrEZG")
+june_2023 <- get_playlist_audio_features("", "4tk4rXKvjZdf3Wu0ycVBwq")
+july_2023 <- get_playlist_audio_features("", "2bIiBvXw5AqtNUoX4w8ipu")
+august_2023 <- get_playlist_audio_features("", "4I7tMDSm9TjrJlkD287uvL")
+september_2023 <- get_playlist_audio_features("", "5SGyoYGEEQnf7KwYNtNGg0")
+october_2023 <- get_playlist_audio_features("", "7vXH5QnB3Dznx8Bs0WoC7f")
+november_2023 <- get_playlist_audio_features("", "7ycXHN80yVV0f4K0XLrfFb")
+december_2023 <- get_playlist_audio_features("", "5zIGaYbfS7krme4GheZP4g")
+
+full_2022 <- bind_rows(
+    march_2022 |> mutate(year="2022", month="march"),
+    april_2022 |> mutate(year="2022", month="april"),
+    may_2022 |> mutate(year="2022", month="may"),
+    june_2022 |> mutate(year="2022", month="june"),
+    july_2022 |> mutate(year="2022", month="july"),
+    august_2022 |> mutate(year="2022", month="august"),
+    september_2022 |> mutate(year="2022", month="september"),
+    october_2022 |> mutate(year="2022", month="october"),
+    november_2022 |> mutate(year="2022", month="november"),
+    december_2022 |> mutate(year="2022", month="december")
+)
+
+full_2023 <- bind_rows(
+    january_2023 |> mutate(year="2023", month="january"),
+    february_2023 |> mutate(year="2023", month="february"),
+    march_2023 |> mutate(year="2023", month="march"),
+    april_2023 |> mutate(year="2023", month="april"),
+    may_2023 |> mutate(year="2023", month="may"),
+    june_2023 |> mutate(year="2023", month="june"),
+    july_2023 |> mutate(year="2023", month="july"),
+    august_2023 |> mutate(year="2023", month="august"),
+    september_2023 |> mutate(year="2023", month="september"),
+    october_2023 |> mutate(year="2023", month="october"),
+    november_2023 |> mutate(year="2023", month="november"),
+    december_2023 |> mutate(year="2023", month="december")
+)
+
+combined_data <- bind_rows(
+  mutate(full_2022, year = 2022),
+  mutate(full_2023, year = 2023)
+)
+
+full_2022
+full_2023
+```
+
+# Chordogram?
+
+```{r}
+circshift <- function(v, n) {
+  if (n == 0) v else c(tail(v, n), head(v, -n))
+}
+
+#      C     C#    D     Eb    E     F     F#    G     Ab    A     Bb    B
+major_chord <-
+  c(   1,    0,    0,    0,    1,    0,    0,    1,    0,    0,    0,    0)
+minor_chord <-
+  c(   1,    0,    0,    1,    0,    0,    0,    1,    0,    0,    0,    0)
+seventh_chord <-
+  c(   1,    0,    0,    0,    1,    0,    0,    1,    0,    0,    1,    0)
+
+major_key <-
+  c(6.35, 2.23, 3.48, 2.33, 4.38, 4.09, 2.52, 5.19, 2.39, 3.66, 2.29, 2.88)
+minor_key <-
+  c(6.33, 2.68, 3.52, 5.38, 2.60, 3.53, 2.54, 4.75, 3.98, 2.69, 3.34, 3.17)
+
+chord_templates <-
+  tribble(
+    ~name, ~template,
+    "Gb:7", circshift(seventh_chord, 6),
+    "Gb:maj", circshift(major_chord, 6),
+    "Bb:min", circshift(minor_chord, 10),
+    "Db:maj", circshift(major_chord, 1),
+    "F:min", circshift(minor_chord, 5),
+    "Ab:7", circshift(seventh_chord, 8),
+    "Ab:maj", circshift(major_chord, 8),
+    "C:min", circshift(minor_chord, 0),
+    "Eb:7", circshift(seventh_chord, 3),
+    "Eb:maj", circshift(major_chord, 3),
+    "G:min", circshift(minor_chord, 7),
+    "Bb:7", circshift(seventh_chord, 10),
+    "Bb:maj", circshift(major_chord, 10),
+    "D:min", circshift(minor_chord, 2),
+    "F:7", circshift(seventh_chord, 5),
+    "F:maj", circshift(major_chord, 5),
+    "A:min", circshift(minor_chord, 9),
+    "C:7", circshift(seventh_chord, 0),
+    "C:maj", circshift(major_chord, 0),
+    "E:min", circshift(minor_chord, 4),
+    "G:7", circshift(seventh_chord, 7),
+    "G:maj", circshift(major_chord, 7),
+    "B:min", circshift(minor_chord, 11),
+    "D:7", circshift(seventh_chord, 2),
+    "D:maj", circshift(major_chord, 2),
+    "F#:min", circshift(minor_chord, 6),
+    "A:7", circshift(seventh_chord, 9),
+    "A:maj", circshift(major_chord, 9),
+    "C#:min", circshift(minor_chord, 1),
+    "E:7", circshift(seventh_chord, 4),
+    "E:maj", circshift(major_chord, 4),
+    "G#:min", circshift(minor_chord, 8),
+    "B:7", circshift(seventh_chord, 11),
+    "B:maj", circshift(major_chord, 11),
+    "D#:min", circshift(minor_chord, 3)
+  )
+
+key_templates <-
+  tribble(
+    ~name, ~template,
+    "Gb:maj", circshift(major_key, 6),
+    "Bb:min", circshift(minor_key, 10),
+    "Db:maj", circshift(major_key, 1),
+    "F:min", circshift(minor_key, 5),
+    "Ab:maj", circshift(major_key, 8),
+    "C:min", circshift(minor_key, 0),
+    "Eb:maj", circshift(major_key, 3),
+    "G:min", circshift(minor_key, 7),
+    "Bb:maj", circshift(major_key, 10),
+    "D:min", circshift(minor_key, 2),
+    "F:maj", circshift(major_key, 5),
+    "A:min", circshift(minor_key, 9),
+    "C:maj", circshift(major_key, 0),
+    "E:min", circshift(minor_key, 4),
+    "G:maj", circshift(major_key, 7),
+    "B:min", circshift(minor_key, 11),
+    "D:maj", circshift(major_key, 2),
+    "F#:min", circshift(minor_key, 6),
+    "A:maj", circshift(major_key, 9),
+    "C#:min", circshift(minor_key, 1),
+    "E:maj", circshift(major_key, 4),
+    "G#:min", circshift(minor_key, 8),
+    "B:maj", circshift(major_key, 11),
+    "D#:min", circshift(minor_key, 3)
+  )
+
+present <-
+  get_tidy_audio_analysis("7KHQtpLpoIV3Wfu22YQT8y") |>
+  compmus_align(sections, segments) |>
+  select(sections) |>
+  unnest(sections) |>
+  mutate(
+    pitches =
+      map(segments,
+        compmus_summarise, pitches,
+        method = "mean", norm = "manhattan"
+      )
+  )
+
+present |> 
+  compmus_match_pitch_template(
+    key_templates,         # Change to chord_templates if descired
+    method = "euclidean",  # Try different distance metrics
+    norm = "manhattan"     # Try different norms
+  ) |>
+  ggplot(
+    aes(x = start + duration / 2, width = duration, y = name, fill = d)
+  ) +
+  geom_tile() +
+  scale_fill_viridis_c(guide = "none") +
+  theme_minimal() +
+  labs(x = "Time (s)", y = "")
+```
+
+# First Things First
+
+## Inputs {.sidebar}
+
+This is supposed to be my introductory page, but I kind of changed around my corpus a bit, so I'll have to rewrite this as well. Stay tuned!
+
+## Column
+
+#### In Rainbows
+
+```{r picture, echo = F, fig.cap = "Radiohead", out.width = '100%'}
+knitr::include_graphics("1f3fcd1922743e6f9159a9ccdf1dbdd9.1000x1000x1.png")
+```
+
+#### In Rainbows
+
+```{r picture2, echo = F, fig.cap = "Radiohead 2", out.width = '100%'}
+knitr::include_graphics("1f3fcd1922743e6f9159a9ccdf1dbdd9.1000x1000x1.png")
+```
+
+## Column
+
+#### In Rainbows
+
+```{r picture3, echo = F, fig.cap = "Radiohead 3", out.width = '100%'}
+knitr::include_graphics("1f3fcd1922743e6f9159a9ccdf1dbdd9.1000x1000x1.png")
+```
+
+#### In Rainbows
+
+```{r picture4, echo = F, fig.cap = "Radiohead 4", out.width = '100%'}
+knitr::include_graphics("1f3fcd1922743e6f9159a9ccdf1dbdd9.1000x1000x1.png")
+```
+
+# What a poser.
+
+## Inputs {.sidebar}
+
+In the following plots, you'll be able to see the characteristics of the music I discovered during the month of April until December. I chose to convey four attributes that Spotify keeps track of to represent my music discovery behavior. First off, I chose valence (the musical positiveness that a track conveys), energy, loudness, and popularity (determined by several factors, including the number of streams, user engagement, and how recently the song was released). These attributes are presented on the x-axis, y-axis, by size, and by color respectively. I chose these four attributes specifically because, in my opinion, they are the most closely related to my own emotions during the time that I discovered a particular song. This way I'll be able to make meaningful connections and find possible patterns in my music discovery behavior.
+
+## Wrapped Attributes {.tabset .tabset-fade}
+
+### Introduction
+
+#### Loudness
+
+```{r}
+
+month_order <- c("january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december")
+
+# Group by year and month, and calculate mean valence
+loudness_by_year_month <- combined_data %>%
+  group_by(year, month) %>%
+  summarize(mean_loudness = mean(loudness, na.rm = TRUE)) %>%
+  ungroup()
+
+# Convert "month" to a factor with the desired order
+loudness_by_year_month$month <- factor(loudness_by_year_month$month, levels = month_order)
+
+# Plot mean valence by year and month
+ggplot(loudness_by_year_month, aes(x = month, y = mean_loudness, fill = factor(year))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Mean Loudness by Year and Month (2022-2023)",
+       x = "Month",
+       y = "Mean Loudness",
+       fill = "Year") +
+  theme_minimal() +
+  theme(legend.position = "top", 
+        axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+On average, I listened to louder music in 2022 than 2023. In the months of April, July, and November we can find the highest difference between loudness in 2022 and 2023, so let's take a look at some songs of that period.
+
+#### Valence
+
+```{r}
+# Group by year and month, and calculate mean valence
+valence_by_year_month <- combined_data %>%
+  group_by(year, month) %>%
+  summarize(mean_valence = mean(valence, na.rm = TRUE)) %>%
+  ungroup()
+
+# Convert "month" to a factor with the desired order
+valence_by_year_month$month <- factor(valence_by_year_month$month, levels = month_order)
+
+# Plot mean valence by year and month
+ggplot(valence_by_year_month, aes(x = month, y = mean_valence, fill = factor(year))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Mean Valence by Year and Month (2022-2023)",
+       x = "Month",
+       y = "Mean Valence",
+       fill = "Year") +
+  theme_minimal() +
+  theme(legend.position = "top", 
+        axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+There seems to be a pattern of growth in the valence of the songs I discovered over time, with an apparent peak in the summer months. Could this correlate with the nice weather that's common in those months or is this simply a coincidence?
+
+#### Popularity
+
+```{r, results='hide'}
+# Group by year and month, and calculate mean valence
+popularity_by_year_month <- combined_data %>%
+  group_by(year, month) %>%
+  summarize(mean_popularity = mean(track.popularity, na.rm = TRUE)) %>%
+  ungroup()
+
+# Convert "month" to a factor with the desired order
+popularity_by_year_month$month <- factor(popularity_by_year_month$month, levels = month_order)
+
+# Plot mean valence by year and month
+ggplot(popularity_by_year_month, aes(x = month, y = mean_popularity, fill = factor(year))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Mean Popularity by Year and Month (2022-2023)",
+       x = "Month",
+       y = "Mean Popularity",
+       fill = "Year") +
+  theme_minimal() +
+  theme(legend.position = "top", 
+        axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+I view the popularity of a song as a particularly telling attribute, as it's significantly easier to discover a song that's more popular. Popular songs tend to also get a lot of time on the radio and are pushed to some of Spotify's biggest playlists. In general, the popularity of songs I discovered in 2022 was higher than that of songs I discovered in 2023. Did I willingly discover more niche songs in the course of that year or was this a coincidence?
+
+### March 2022
+
+```{r, results='hide'}
+plot <- march_2022 |>                    
+  mutate(
+    mode = ifelse(mode == 0, "Minor", "Major")
+  ) |>
+  ggplot(                     
+    aes(
+      x = valence,
+      y = energy,
+      size = loudness,
+      colour = track.popularity
+    )
+  ) +
+  geom_point() +              
+  geom_rug(linewidth = 0.1) + 
+  scale_x_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),   
+    minor_breaks = NULL       
+  ) +
+  scale_y_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),
+    minor_breaks = NULL
+  ) +
+  scale_colour_viridis_c() +
+  scale_size_continuous(
+    trans="exp",
+    guide="none"
+  ) +
+  theme_light() +             
+  labs(                       
+    x = "Valence",
+    y = "Energy",
+    colour = "Popularity",
+    size = "Loudness"
+  )
+
+plot
+```
+
+### April 2022
+
+```{r, results='hide'}
+plot <- april_2022 |>                    
+  mutate(
+    mode = ifelse(mode == 0, "Minor", "Major")
+  ) |>
+  ggplot(                     
+    aes(
+      x = valence,
+      y = energy,
+      size = loudness,
+      colour = track.popularity
+    )
+  ) +
+  geom_point() +              
+  geom_rug(linewidth = 0.1) + 
+  scale_x_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),   
+    minor_breaks = NULL       
+  ) +
+  scale_y_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),
+    minor_breaks = NULL
+  ) +
+  scale_colour_viridis_c() +
+  scale_size_continuous(
+    trans="exp",
+    guide="none"
+  ) +
+  theme_light() +             
+  labs(                       
+    x = "Valence",
+    y = "Energy",
+    colour = "Popularity",
+    size = "Loudness"
+  )
+
+plot
+```
+
+### May 2022
+
+```{r, results='hide'}
+plot <- may_2022 |>                    
+  mutate(
+    mode = ifelse(mode == 0, "Minor", "Major")
+  ) |>
+  ggplot(                     
+    aes(
+      x = valence,
+      y = energy,
+      size = loudness,
+      colour = track.popularity
+    )
+  ) +
+  geom_point() +              
+  geom_rug(linewidth = 0.1) + 
+  scale_x_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),   
+    minor_breaks = NULL       
+  ) +
+  scale_y_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),
+    minor_breaks = NULL
+  ) +
+  scale_colour_viridis_c() +
+  scale_size_continuous(
+    trans="exp",
+    guide="none"
+  ) +
+  theme_light() +             
+  labs(                       
+    x = "Valence",
+    y = "Energy",
+    colour = "Popularity",
+    size = "Loudness"
+  )
+
+plot
+```
+
+### June 2022
+
+```{r, results='hide'}
+plot <- june_2022 |>                    
+  mutate(
+    mode = ifelse(mode == 0, "Minor", "Major")
+  ) |>
+  ggplot(                     
+    aes(
+      x = valence,
+      y = energy,
+      size = loudness,
+      colour = track.popularity
+    )
+  ) +
+  geom_point() +              
+  geom_rug(linewidth = 0.1) + 
+  scale_x_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),   
+    minor_breaks = NULL       
+  ) +
+  scale_y_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),
+    minor_breaks = NULL
+  ) +
+  scale_colour_viridis_c() +
+  scale_size_continuous(
+    trans="exp",
+    guide="none"
+  ) +
+  theme_light() +             
+  labs(                       
+    x = "Valence",
+    y = "Energy",
+    colour = "Popularity",
+    size = "Loudness"
+  )
+
+plot
+```
+
+### July 2022
+
+```{r, results='hide'}
+plot <- july_2022 |>                    
+  mutate(
+    mode = ifelse(mode == 0, "Minor", "Major")
+  ) |>
+  ggplot(                     
+    aes(
+      x = valence,
+      y = energy,
+      size = loudness,
+      colour = track.popularity
+    )
+  ) +
+  geom_point() +              
+  geom_rug(linewidth = 0.1) + 
+  scale_x_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),   
+    minor_breaks = NULL       
+  ) +
+  scale_y_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),
+    minor_breaks = NULL
+  ) +
+  scale_colour_viridis_c() +
+  scale_size_continuous(
+    trans="exp",
+    guide="none"
+  ) +
+  theme_light() +             
+  labs(                       
+    x = "Valence",
+    y = "Energy",
+    colour = "Popularity",
+    size = "Loudness"
+  )
+
+plot
+```
+
+### August 2022
+
+```{r, results='hide'}
+plot <- august_2022 |>                    
+  mutate(
+    mode = ifelse(mode == 0, "Minor", "Major")
+  ) |>
+  ggplot(                     
+    aes(
+      x = valence,
+      y = energy,
+      size = loudness,
+      colour = track.popularity
+    )
+  ) +
+  geom_point() +              
+  geom_rug(linewidth = 0.1) + 
+  scale_x_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),   
+    minor_breaks = NULL       
+  ) +
+  scale_y_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),
+    minor_breaks = NULL
+  ) +
+  scale_colour_viridis_c() +
+  scale_size_continuous(
+    trans="exp",
+    guide="none"
+  ) +
+  theme_light() +             
+  labs(                       
+    x = "Valence",
+    y = "Energy",
+    colour = "Popularity",
+    size = "Loudness"
+  )
+
+plot
+```
+
+### September 2022
+
+```{r, results='hide'}
+plot <- september_2022 |>                    
+  mutate(
+    mode = ifelse(mode == 0, "Minor", "Major")
+  ) |>
+  ggplot(                     
+    aes(
+      x = valence,
+      y = energy,
+      size = loudness,
+      colour = track.popularity
+    )
+  ) +
+  geom_point() +              
+  geom_rug(linewidth = 0.1) + 
+  scale_x_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),   
+    minor_breaks = NULL       
+  ) +
+  scale_y_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),
+    minor_breaks = NULL
+  ) +
+  scale_colour_viridis_c() +
+  scale_size_continuous(
+    trans="exp",
+    guide="none"
+  ) +
+  theme_light() +             
+  labs(                       
+    x = "Valence",
+    y = "Energy",
+    colour = "Popularity",
+    size = "Loudness"
+  )
+
+plot
+```
+
+### October 2022
+
+```{r, results='hide'}
+plot <- october_2022 |>                    
+  mutate(
+    mode = ifelse(mode == 0, "Minor", "Major")
+  ) |>
+  ggplot(                     
+    aes(
+      x = valence,
+      y = energy,
+      size = loudness,
+      colour = track.popularity
+    )
+  ) +
+  geom_point() +              
+  geom_rug(linewidth = 0.1) + 
+  scale_x_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),   
+    minor_breaks = NULL       
+  ) +
+  scale_y_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),
+    minor_breaks = NULL
+  ) +
+  scale_colour_viridis_c() +
+  scale_size_continuous(
+    trans="exp",
+    guide="none"
+  ) +
+  theme_light() +             
+  labs(                       
+    x = "Valence",
+    y = "Energy",
+    colour = "Popularity",
+    size = "Loudness"
+  )
+
+plot
+```
+
+### November 2022
+
+```{r, results='hide'}
+plot <- november_2022 |>                    
+  mutate(
+    mode = ifelse(mode == 0, "Minor", "Major")
+  ) |>
+  ggplot(                     
+    aes(
+      x = valence,
+      y = energy,
+      size = loudness,
+      colour = track.popularity
+    )
+  ) +
+  geom_point() +              
+  geom_rug(linewidth = 0.1) + 
+  scale_x_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),   
+    minor_breaks = NULL       
+  ) +
+  scale_y_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),
+    minor_breaks = NULL
+  ) +
+  scale_colour_viridis_c() +
+  scale_size_continuous(
+    trans="exp",
+    guide="none"
+  ) +
+  theme_light() +             
+  labs(                       
+    x = "Valence",
+    y = "Energy",
+    colour = "Popularity",
+    size = "Loudness"
+  )
+
+plot
+```
+
+### December 2022
+
+```{r, results='hide'}
+plot <- december_2022 |>                    
+  mutate(
+    mode = ifelse(mode == 0, "Minor", "Major")
+  ) |>
+  ggplot(                     
+    aes(
+      x = valence,
+      y = energy,
+      size = loudness,
+      colour = track.popularity
+    )
+  ) +
+  geom_point() +              
+  geom_rug(linewidth = 0.1) + 
+  scale_x_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),   
+    minor_breaks = NULL       
+  ) +
+  scale_y_continuous(         
+    limits = c(0, 1),
+    breaks = c(0, 0.50, 1),
+    minor_breaks = NULL
+  ) +
+  scale_colour_viridis_c() +
+  scale_size_continuous(
+    trans="exp",
+    guide="none"
+  ) +
+  theme_light() +             
+  labs(                       
+    x = "Valence",
+    y = "Energy",
+    colour = "Popularity",
+    size = "Loudness"
+  )
+
+plot
+```
+
+# Chroma Features
+
+## Inputs {.sidebar}
+
+Here you'll find some Chroma Features and such.
+
+## Wrapped Attributes {.tabset}
+
+### Just by Radiohead
+
+```{r, results='hide'}
+Just <-
+  get_tidy_audio_analysis("1dyTcli07c77mtQK3ahUZR") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
+
+Just |>
+  mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |>
+  compmus_gather_chroma() |> 
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = pitch_class,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
+  theme_minimal() +
+  scale_fill_viridis_c()
+```
+
+# Timbre Features
+
+## Inputs {.sidebar}
+
+Here you'll find the Self-Similarity Matrix and Cepstogram of the track 'Bodysnatchers', from the 2007 album 'In Rainbows', by Radiohead. This is a track that is characterized by loud guitars, bass, and hectic drums. This is represented in the Cepstogram, where the first timbre component (loudness) is almost entirely colored yellow or green-ish. The return to blue at around 120 seconds for the third and seventh timbre component is explained by a relatively calm part of the song. The loudness of the song is also characterized by the Self-Similarity Matrix, which is almost entirely dark blue, except for the final few seconds, where it switches over to yellow. The final few seconds of the song are complete silence, which contrasts heavily with the loudness of the previous parts of the song, thus explaining a similar contrast in the Matrix.
+
+## Wrapped Attributes {.tabset}
+
+### Self Similarity Matrix
+
+```{r}
+bodysnatchers <-
+  get_tidy_audio_analysis("4pWIwnnqx8k01fuF95UMIg") |> # Change URI.
+  compmus_align(bars, segments) |>                     # Change `bars`
+  select(bars) |>                                      #   in all three
+  unnest(bars) |>                                      #   of these lines.
+  mutate(
+    pitches =
+      map(segments,
+        compmus_summarise, pitches,
+        method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  ) |>
+  mutate(
+    timbre =
+      map(segments,
+        compmus_summarise, timbre,
+        method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  )
+
+bodysnatchers |>
+  compmus_self_similarity(timbre, "cosine") |> 
+  ggplot(
+    aes(
+      x = xstart + xduration / 2,
+      width = xduration,
+      y = ystart + yduration / 2,
+      height = yduration,
+      fill = d
+    )
+  ) +
+  geom_tile() +
+  coord_fixed() +
+  scale_fill_viridis_c(guide = "none") +
+  theme_classic() +
+  labs(x = "", y = "")
+```
+
+### Cepstrum Thingy
+
+```{r}
+bodysnatchers |>
+  compmus_gather_timbre() |>
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = basis,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
+  scale_fill_viridis_c() +
+  theme_classic()
+```
