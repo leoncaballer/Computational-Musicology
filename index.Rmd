@@ -13,6 +13,9 @@ library(plotly)
 library(compmus)
 library(purrr)
 library(htmlwidgets)
+library(tidymodels)
+library(ggdendro)
+library(heatmaply)
 ```
 
 
@@ -25,6 +28,100 @@ hailtothethief <- get_playlist_audio_features("", "3daz1tZ64UA3KMbbyPPoXM")
 inrainbows <- get_playlist_audio_features("", "2k3CNLrpE5iGzDTuzfHZGT")
 thekingoflimbs <- get_playlist_audio_features("", "4S60o4zSaeMfMYwi5Ndxqf")
 amoonshapedpool <- get_playlist_audio_features("", "0rllYNwldDnjrOGx03VMnc")
+```
+
+Page 7
+=====================================     
+
+Sidebar {.sidebar}
+-------------------------------------
+
+
+Column {.tabset}
+-------------------------------------
+
+```{r}
+get_conf_mat <- function(fit) {
+  outcome <- .get_tune_outcome_names(fit)
+  fit |> 
+    collect_predictions() |> 
+    conf_mat(truth = outcome, estimate = .pred_class)
+}  
+
+get_pr <- function(fit) {
+  fit |> 
+    conf_mat_resampled() |> 
+    group_by(Prediction) |> mutate(precision = Freq / sum(Freq)) |> 
+    group_by(Truth) |> mutate(recall = Freq / sum(Freq)) |> 
+    ungroup() |> filter(Prediction == Truth) |> 
+    select(class = Prediction, precision, recall)
+}  
+
+radiohead <-
+  thebends |>
+  add_audio_analysis() |>
+  mutate(
+    segments = map2(segments, key, compmus_c_transpose),
+    pitches =
+      map(segments,
+        compmus_summarise, pitches,
+        method = "mean", norm = "manhattan"
+      ),
+    timbre =
+      map(
+        segments,
+        compmus_summarise, timbre,
+        method = "mean"
+      )
+  ) |>
+  mutate(pitches = map(pitches, compmus_normalise, "clr")) |>
+  mutate_at(vars(pitches, timbre), map, bind_rows) |>
+  unnest(cols = c(pitches, timbre))
+
+halloween_juice <-
+  recipe(
+    track.name ~
+      danceability +
+      energy +
+      loudness +
+      speechiness +
+      acousticness +
+      instrumentalness +
+      liveness +
+      valence +
+      tempo +
+      duration +
+      C + `C#|Db` + D + `D#|Eb` +
+      E + `F` + `F#|Gb` + G +
+      `G#|Ab` + A + `A#|Bb` + B +
+      c01 + c02 + c03 + c04 + c05 + c06 +
+      c07 + c08 + c09 + c10 + c11 + c12,
+    data = radiohead
+  ) |>
+  step_center(all_predictors()) |>
+  step_scale(all_predictors()) |> 
+  # step_range(all_predictors()) |> 
+  prep(radiohead |> mutate(track.name = str_trunc(track.name, 20))) |>
+  juice() |>
+  column_to_rownames("track.name")
+```
+
+```{r}
+halloween_dist <- dist(halloween_juice, method = "euclidean")
+
+halloween_dist |> 
+  hclust(method = "single") |> # Try single, average, and complete.
+  dendro_data() |>
+  ggdendrogram()
+```
+
+```{r}
+heatmaply(
+  halloween_juice,
+  hclustfun = hclust,
+  hclust_method = "average",  # Change for single, average, or complete linkage.
+  dist_method = "euclidean"
+)
 ```
 
 Page 6
@@ -41,34 +138,29 @@ Column {.tabset}
 ### Chart 1
 
 ```{r}
-paranoid <- get_tidy_audio_analysis("6LgJvl0Xdtc73RJ1mmpotq")
-
-paranoid |>
-  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
-  ggplot(aes(x = time, y = bpm, fill = power)) +
-  geom_raster() +
-  scale_fill_viridis_c(guide = "none") +
-  labs(x = "Time (s)", y = "Tempo (BPM)") +
-  theme_classic()
-```
+# paranoid |>
+#   tempogram(window_size = 8, hop_size = 1, cyclic = TRUE) |>
+#   ggplot(aes(x = time, y = bpm, fill = power)) +
+#   geom_raster() +
+#   scale_fill_viridis_c(guide = "none") +
+#   labs(x = "Time (s)", y = "Tempo (BPM)") +
+#   theme_classic()
+```   
 
 ### Chart 2
 
 ```{r}
-paranoid |>
-  tempogram(window_size = 8, hop_size = 1, cyclic = TRUE) |>
-  ggplot(aes(x = time, y = bpm, fill = power)) +
-  geom_raster() +
-  scale_fill_viridis_c(guide = "none") +
-  labs(x = "Time (s)", y = "Tempo (BPM)") +
-  theme_classic()
-```   
-    
-### Chart 3
-
-```{r}
+# paranoid <- get_tidy_audio_analysis("6LgJvl0Xdtc73RJ1mmpotq")
+# 
+# paranoid |>
+#   tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
+#   ggplot(aes(x = time, y = bpm, fill = power)) +
+#   geom_raster() +
+#   scale_fill_viridis_c(guide = "none") +
+#   labs(x = "Time (s)", y = "Tempo (BPM)") +
+#   theme_classic()
 ```
-
+    
 Page 1
 =====================================  
 
@@ -79,6 +171,10 @@ Over the years, Radiohead has been lauded as one of the best bands of all time b
 
 In this project, I want to show you how the sound of Radiohead has changed from their first album, Pablo Honey, to their most recent release, A Moon Shaped Pool. We'll find out exactly what makes each of their albums special through Spotify's intricate track analysis features. 
 
+```{=html}
+<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/2N2R2saYKqgO91e1LK4jvp?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+```
+
 Column
 -------------------------------------
 
@@ -88,7 +184,7 @@ Column
 knitr::include_graphics("Images/radiohead-pablo-honey-1993-7b6d5a3d-fe03-46f5-a68d-f628b982c514.png")
 ```
 
-### If we smile can we go ?
+### Radiohead (Pablo Honey era 2) 
 
 ```{r picture2, echo = F, out.width = '100%', out.height= '100%'}
 knitr::include_graphics("Images/qogsnuj192ly.png")
@@ -96,7 +192,7 @@ knitr::include_graphics("Images/qogsnuj192ly.png")
 
 Column
 -------------------------------------
-### Radiohead (Pablo Honey era 2)
+### If we smile can we go?
 
 ```{r picture3, echo = F, out.width = '100%', out.height= '100%'}
 knitr::include_graphics("Images/jo2y80wp0pm11_1.png")
