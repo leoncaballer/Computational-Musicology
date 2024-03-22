@@ -116,12 +116,12 @@ halloween_dist |>
 ```
 
 ```{r}
-heatmaply(
-  halloween_juice,
-  hclustfun = hclust,
-  hclust_method = "average",  # Change for single, average, or complete linkage.
-  dist_method = "euclidean"
-)
+# heatmaply(
+#   halloween_juice,
+#   hclustfun = hclust,
+#   hclust_method = "average",  # Change for single, average, or complete linkage.
+#   dist_method = "euclidean"
+# )
 ```
 
 Page 6
