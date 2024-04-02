@@ -1321,7 +1321,7 @@ radiohead2 |>
   labs(x = "Spotify Timbre Coefficients", y = "", fill = "Album")
 ```
 
-### 2003 - 2016
+### 2003 - 2016 
 
 ```{r}
 radiohead3 |>
