@@ -28,29 +28,30 @@ hailtothethief <- get_playlist_audio_features("", "3daz1tZ64UA3KMbbyPPoXM")
 inrainbows <- get_playlist_audio_features("", "2k3CNLrpE5iGzDTuzfHZGT")
 thekingoflimbs <- get_playlist_audio_features("", "4S60o4zSaeMfMYwi5Ndxqf")
 amoonshapedpool <- get_playlist_audio_features("", "0rllYNwldDnjrOGx03VMnc")
+
+radiohead_temp <- bind_rows(pablohoney, thebends, okcomputer, kidamnesiac, hailtothethief, inrainbows, thekingoflimbs, amoonshapedpool)
 ```
 
 ```{r}
-# pablohoney <- pablohoney |>
-#   add_audio_analysis()
-# thebends <- thebends |>
-#   add_audio_analysis()
-# okcomputer <- okcomputer |>
-#   add_audio_analysis()
-# kidamnesiac <- kidamnesiac |>
-#   add_audio_analysis()
-# hailtothethief <- hailtothethief |> 
-#   add_audio_analysis()
-# inrainbows <- inrainbows |> 
-#   add_audio_analysis()
-# thekingoflimbs <- thekingoflimbs |>  
-#   add_audio_analysis()
-# amoonshapedpool <- amoonshapedpool |> 
-#   add_audio_analysis()
+pablohoney <- pablohoney |>
+  add_audio_analysis()
+thebends <- thebends |>
+  add_audio_analysis()
+okcomputer <- okcomputer |>
+  add_audio_analysis()
+kidamnesiac <- kidamnesiac |>
+  add_audio_analysis()
+hailtothethief <- hailtothethief |>
+  add_audio_analysis()
+inrainbows <- inrainbows |>
+  add_audio_analysis()
+thekingoflimbs <- thekingoflimbs |>
+  add_audio_analysis()
+amoonshapedpool <- amoonshapedpool |>
+  add_audio_analysis()
 ```
 
-    
-Page 1
+Introduction
 =====================================  
 
 Sidebar {.sidebar data-width=275px}
@@ -95,7 +96,7 @@ knitr::include_graphics("Images/jo2y80wp0pm11_1.png")
 knitr::include_graphics("Images/a78radiohead.png")
 ```
 
-Page 2
+Exploratory Analysis
 =====================================  
 
 Sidebar {.sidebar data-width=400px}
@@ -105,10 +106,11 @@ Let's first take a look at some basic features of Radiohead's 8 main releases, r
 
 This trend then continues on through the next 2 albums, The Bends and OK Computer, although some exceptions to the rule become clear. Both albums contain more songs with a low energy and a low valence. Now, a shift in tone becomes clear. The next album, Kid A Mnesiac (A double album containing two previously individual releases: Kid A and Amnesiac), almost entirely consists of songs on the lower end of the valence and energy spectrum. These albums marked the band's departure from more standard alternative rock and saw them adapting a sound that was influenced by electronic music from the time. 
 
-Their next album, Hail to the Thief, sees the band returning to the traditional rock sound with more loud, high-energy songs. A return which is somewhat cut short by the next album, In Rainbows, which beautifully combines the band's electronic influences and alternative rock roots into a melancholic masterpiece. Make no mistake though, there are some outliers in this album. The King of Limbs is heavily electronic, containing almost no traditional sounds that the listeners were used to at the time. This, along with many collaborations with electronic artists and DJ's, results in a high-energy album that still conveys Radiohead's gloomy sound. The final album in this corpus, A Moon Shaped Pool, is an almost completely gloomy, low-energy, and very quiet album, with one noteable outlier, "Burn the Witch".
+Their next album, Hail to the Thief, sees the band returning to the traditional rock sound with more loud, high-energy songs. A return which is somewhat cut short by the next album, In Rainbows, which beautifully combines the band's electronic influences and alternative rock roots into a melancholic masterpiece. Make no mistake though, there are some outliers in this album. The King of Limbs is heavily electronic, containing almost no traditional sounds that the listeners were used to at the time. This, along with many collaborations with electronic artists and DJ's, results in a high-energy album that still conveys Radiohead's gloomy sound. The final album in this corpus, A Moon Shaped Pool, is an almost completely gloomy, low-energy, and very quiet album, with one notable outlier, "Burn the Witch".
 
 Radiohead also distinguish themselves from other bands by using relatively complex song structures. It is sometimes argued that this complexity only came to be in their later albums. I, however, think that this is nonsense. To demonstrate this, I could pick out the most musically complex track of every album, but that would defeat the purpose of my argument. Instead, I choose to visualize my favorite track from each album to show that, even in their earlier albums, Radiohead were already handling pretty complex stuff and, on the contrary, that their later albums also contain tracks with a rather simple structure (although this does not take away their beauty whatsoever). 
-In the next section, I will look at the structure and timbre components of 8 of these tracks. 
+
+In the next part, I will look at the structure and timbre components of 8 of these tracks. 
 
 Column {.tabset}
 -------------------------------------
@@ -555,7 +557,7 @@ scatter_matrix <- plot_ly(
 scatter_matrix
 ```
 
-# Blow Out - Remix {data-navmenu="Page 3"}
+# Blow Out - Remix {data-navmenu="Individual Tracks"}
 
 Sidebar {.sidebar}
 -------------------------------------  
@@ -633,7 +635,7 @@ blowout |>
 ```
 
 
-# Just {data-navmenu="Page 3"}
+# Just {data-navmenu="Individual Tracks"}
 
 Sidebar {.sidebar}
 -------------------------------------  
@@ -710,7 +712,7 @@ just |>
   labs(x = "", y = "")
 ```
 
-# Man of War {data-navmenu="Page 3"}
+# Man of War {data-navmenu="Individual Tracks"}
 
 Sidebar {.sidebar}
 -------------------------------------  
@@ -787,7 +789,7 @@ manofwar |>
   labs(x = "", y = "")
 ```
 
-# Motion Picture Soundtrack {data-navmenu="Page 3"}
+# Motion Picture Soundtrack {data-navmenu="Individual Tracks"}
 
 Sidebar {.sidebar}
 -------------------------------------  
@@ -864,7 +866,7 @@ motionpicture |>
   labs(x = "", y = "")
 ```
 
-# A Wolf At the Door {data-navmenu="Page 3"}
+# A Wolf At the Door {data-navmenu="Individual Tracks"}
 
 Sidebar {.sidebar}
 -------------------------------------  
@@ -941,7 +943,7 @@ wolf |>
   labs(x = "", y = "")
 ```
 
-# Weird Fishes/Arpeggi {data-navmenu="Page 3"}
+# Weird Fishes/Arpeggi {data-navmenu="Individual Tracks"}
 
 Sidebar {.sidebar}
 -------------------------------------  
@@ -1018,7 +1020,7 @@ weirdfishes |>
   labs(x = "", y = "")
 ```
 
-# Separator {data-navmenu="Page 3"}
+# Separator {data-navmenu="Individual Tracks"}
 
 Sidebar {.sidebar}
 -------------------------------------  
@@ -1095,12 +1097,12 @@ separator |>
   labs(x = "", y = "")
 ```
 
-# Ful Stop {data-navmenu="Page 3"}
+# Ful Stop {data-navmenu="Individual Tracks"}
 
 Sidebar {.sidebar}
 -------------------------------------  
 
-Although the Self-Similarity Matrix of this track looks like a piece of art on its own, it is not very telling. The biggest transition in the piece, which occurs at 3:11, where bass and, subsequently, kick in, and the tempo picks up, is not really visible from both visualisations. 
+Although the Self-Similarity Matrix of this track looks like a piece of art on its own, it is not very telling. The biggest transition in the piece, which occurs at 3:11, where bass and, subsequently, kick in, and the tempo picks up, is not really visible from both visualisations. This might be a case where both visualisations can't contribute to a better understanding of the piece of music.
 
 Column {.tabset}
 ------------------------------------- 
@@ -1172,180 +1174,7 @@ fulstop |>
   labs(x = "", y = "")
 ```
 
-
-Page 4
-=====================================     
-
-Sidebar {.sidebar}
--------------------------------------  
-
-Now that we looked at some individual pieces from Radiohead's discography, let's take a look at how their music has changed throughout the years on a more general level. 
-
-Column {.tabset}
--------------------------------------
-
-### Chart 1
-
-```{r}
-# radiohead <- bind_rows(pablohoney, thebends, okcomputer, kidamnesiac, hailtothethief, inrainbows, thekingoflimbs, amoonshapedpool)
-
-radiohead1 <- bind_rows(pablohoney, thebends, okcomputer)
-radiohead2 <- bind_rows(kidamnesiac, hailtothethief)
-radiohead3 <- bind_rows(inrainbows, thekingoflimbs, amoonshapedpool)
-```   
-
-```{r}
-radiohead1 |>
-  mutate(
-    sections =
-      map(
-        sections,                                    # sections or segments
-        summarise_at,
-        vars(tempo, loudness, duration),             # features of interest
-        list(section_mean = mean, section_sd = sd)   # aggregation functions
-      )
-  ) |>
-  unnest(sections) |>
-  ggplot(
-    aes(
-      x = tempo,
-      y = tempo_section_sd,
-      colour = playlist_name,
-      alpha = loudness
-    )
-  ) +
-  geom_point(aes(size = duration / 60)) +
-  geom_rug() +
-  theme_minimal() +
-  ylim(0, 5) +
-  labs(
-    x = "Mean Tempo (bpm)",
-    y = "SD Tempo",
-    colour = "Album",
-    size = "Duration (min)",
-    alpha = "Volume (dBFS)"
-  )
-
-radiohead2 |>
-  mutate(
-    sections =
-      map(
-        sections,                                    # sections or segments
-        summarise_at,
-        vars(tempo, loudness, duration),             # features of interest
-        list(section_mean = mean, section_sd = sd)   # aggregation functions
-      )
-  ) |>
-  unnest(sections) |>
-  ggplot(
-    aes(
-      x = tempo,
-      y = tempo_section_sd,
-      colour = playlist_name,
-      alpha = loudness
-    )
-  ) +
-  geom_point(aes(size = duration / 60)) +
-  geom_rug() +
-  theme_minimal() +
-  ylim(0, 5) +
-  labs(
-    x = "Mean Tempo (bpm)",
-    y = "SD Tempo",
-    colour = "Album",
-    size = "Duration (min)",
-    alpha = "Volume (dBFS)"
-  )
-
-radiohead3 |>
-  mutate(
-    sections =
-      map(
-        sections,                                    # sections or segments
-        summarise_at,
-        vars(tempo, loudness, duration),             # features of interest
-        list(section_mean = mean, section_sd = sd)   # aggregation functions
-      )
-  ) |>
-  unnest(sections) |>
-  ggplot(
-    aes(
-      x = tempo,
-      y = tempo_section_sd,
-      colour = playlist_name,
-      alpha = loudness
-    )
-  ) +
-  geom_point(aes(size = duration / 60)) +
-  geom_rug() +
-  theme_minimal() +
-  ylim(0, 5) +
-  labs(
-    x = "Mean Tempo (bpm)",
-    y = "SD Tempo",
-    colour = "Album",
-    size = "Duration (min)",
-    alpha = "Volume (dBFS)"
-  )
-```
-
-### Chart 2
-
-```{r}
-radiohead1 |>
-  mutate(
-    timbre =
-      map(
-        segments,
-        compmus_summarise,
-        timbre,
-        method = "mean"
-      )
-  ) |>
-  select(playlist_name, timbre) |>
-  compmus_gather_timbre() |>
-  ggplot(aes(x = basis, y = value, fill = playlist_name)) +
-  geom_violin() +
-  scale_fill_viridis_d() +
-  labs(x = "Spotify Timbre Coefficients", y = "", fill = "Album")
-
-radiohead2 |>
-  mutate(
-    timbre =
-      map(
-        segments,
-        compmus_summarise,
-        timbre,
-        method = "mean"
-      )
-  ) |>
-  select(playlist_name, timbre) |>
-  compmus_gather_timbre() |>
-  ggplot(aes(x = basis, y = value, fill = playlist_name)) +
-  geom_violin() +
-  scale_fill_viridis_d() +
-  labs(x = "Spotify Timbre Coefficients", y = "", fill = "Album")
-
-radiohead3 |>
-  mutate(
-    timbre =
-      map(
-        segments,
-        compmus_summarise,
-        timbre,
-        method = "mean"
-      )
-  ) |>
-  select(playlist_name, timbre) |>
-  compmus_gather_timbre() |>
-  ggplot(aes(x = basis, y = value, fill = playlist_name)) +
-  geom_violin() +
-  scale_fill_viridis_d() +
-  labs(x = "Spotify Timbre Coefficients", y = "", fill = "Album")
-```
-
-Page 5
-=====================================     
+# Tempogram (Obligatory Inclusion) {data-navmenu="Individual Tracks"}        
 
 Sidebar {.sidebar}
 -------------------------------------  
@@ -1355,7 +1184,7 @@ When discussing the complexity of Radiohead songs, one song in particular never 
 Column {.tabset}
 -------------------------------------
 
-### Chart 1
+### Acyclic Tempogram
 
 ```{r}
 paranoid <- get_tidy_audio_analysis("6LgJvl0Xdtc73RJ1mmpotq")
@@ -1369,7 +1198,7 @@ paranoid |>
   theme_classic()
 ```   
 
-### Chart 2
+### Cyclic Tempogram
 
 ```{r}
 paranoid |>
@@ -1379,4 +1208,267 @@ paranoid |>
   scale_fill_viridis_c(guide = "none") +
   labs(x = "Time (s)", y = "Tempo (BPM)") +
   theme_classic()
+```
+
+# Tempo, Duration, and Loudness {data-navmenu="General Analysis"}    
+
+Sidebar {.sidebar}
+-------------------------------------  
+
+Now that we looked at some individual pieces from Radiohead's discography, let's take a look at how their music has changed throughout the years on a more general level. Looking at these visualisations, we can see something interesting. Besides from some outliers, there hasn't been a real change visible in the duration, tempo, and loudness of Radiohead's tracks. Most songs have been clustered together neatly in the graph even though they're from different eras However, it is also evident that their sound has changed. So what's the deal? If all these objective aspects of the songs have remained somewhat similar, let's look at something more immaterial: timbre.
+
+Column
+-------------------------------------
+
+### Tempo, Duration, and Loudness
+
+```{r}
+radiohead <- bind_rows(pablohoney, thebends, okcomputer, kidamnesiac, hailtothethief, inrainbows, thekingoflimbs, amoonshapedpool)
+
+radiohead1 <- bind_rows(pablohoney, thebends, okcomputer)
+radiohead2 <- bind_rows(kidamnesiac, hailtothethief)
+radiohead3 <- bind_rows(inrainbows, thekingoflimbs, amoonshapedpool)
+```   
+
+```{r}
+radiohead |>
+  mutate(
+    sections =
+      map(
+        sections,                                    # sections or segments
+        summarise_at,
+        vars(tempo, loudness, duration),             # features of interest
+        list(section_mean = mean, section_sd = sd)   # aggregation functions
+      )
+  ) |>
+  unnest(sections) |>
+  ggplot(
+    aes(
+      x = tempo,
+      y = tempo_section_sd,
+      colour = playlist_name,
+      alpha = loudness
+    )
+  ) +
+  geom_point(aes(size = duration / 60)) +
+  geom_rug() +
+  theme_minimal() +
+  ylim(0, 5) +
+  labs(
+    x = "Mean Tempo (bpm)",
+    y = "SD Tempo",
+    colour = "Album",
+    size = "Duration (min)",
+    alpha = "Volume (dBFS)"
+  )
+```
+
+# Timbre Components {data-navmenu="General Analysis"}    
+
+Sidebar {.sidebar data-width=400px}
+-------------------------------------  
+
+I chose to group together the albums in 3 eras: the first ranging from 1992 to 1997, the next from 1997 to 2003, and the last from 2003 to 2016, with each era containing three albums (Recall that Kid A Mnesiac is a double album). This should help to identify which of the Mel-frequency cepstral coefficients is prevalent in which era. 
+
+As we can see, every timbre component of the first three of Radiohead's albums are rather similar, which corresponds to how they actually sound. These three albums, however complex, still have the 'classic' sound that characterised much of rock music at the time. 
+
+In the introduction I said that Kid A and Amnesiac represented an evolution in the sound of the band and that Hail to the Thief marked somewhat of a return to their original sound. This makes these three albums perfect to compare how Radiohead has changed in this era. We can see that it is very easy to differentiate between Kid A/Amnesiac and Hail to the Thief for almost every timbre component. This could mean that Kid A and Amnesiac are more 'musically rich' than Hail to the Thief and the albums from the 1992-1997 era, but there's no way to be sure of this as we don't know the exact meaning of every timbre component. One thing we can be sure of, however, is that there is a clear difference in timbre, and thus sound, between these albums. One other thing to keep in mind is the 'low' score of Kid A/Amnesiac on the second timbre component. We can use this to compare these albums to other future albums. 
+
+For the final era, all albums, again, are not easily distinguishable from their timbre components, similarly to the first era. However, the timbre components of In Rainbows and A Moon Shaped Pool somewhat correspond to those of Kid A and Amnesiac; especially the second component is similar. In the introductory page I also said that Radiohead implemented a lot of the electronic inspiration from Kid A and Amnesiac in their future albums. Could this be the case here? Possibly. However, one drawback in this case is the lack of similarity between The King of Limbs, arguably Radiohead's most electronically inspired album, and Kid A/Amnesiac. Could these albums have incorporated a different kind of electronic sound? It's certainly possible, as electronic music has been, is, and definitely will be an ever-expanding genre that is not easily defined. 
+
+Column {.tabset}
+-------------------------------------
+
+### 1992-1997
+
+```{r}
+radiohead1 |>
+  mutate(
+    timbre =
+      map(
+        segments,
+        compmus_summarise,
+        timbre,
+        method = "mean"
+      )
+  ) |>
+  select(playlist_name, timbre) |>
+  compmus_gather_timbre() |>
+  ggplot(aes(x = basis, y = value, fill = playlist_name)) +
+  geom_violin() +
+  scale_fill_viridis_d() +
+  labs(x = "Spotify Timbre Coefficients", y = "", fill = "Album")
+```
+
+### 1997 - 2003
+
+```{r}
+radiohead2 |>
+  mutate(
+    timbre =
+      map(
+        segments,
+        compmus_summarise,
+        timbre,
+        method = "mean"
+      )
+  ) |>
+  select(playlist_name, timbre) |>
+  compmus_gather_timbre() |>
+  ggplot(aes(x = basis, y = value, fill = playlist_name)) +
+  geom_violin() +
+  scale_fill_viridis_d() +
+  labs(x = "Spotify Timbre Coefficients", y = "", fill = "Album")
+```
+
+### 2003 - 2016
+
+```{r}
+radiohead3 |>
+  mutate(
+    timbre =
+      map(
+        segments,
+        compmus_summarise,
+        timbre,
+        method = "mean"
+      )
+  ) |>
+  select(playlist_name, timbre) |>
+  compmus_gather_timbre() |>
+  ggplot(aes(x = basis, y = value, fill = playlist_name)) +
+  geom_violin() +
+  scale_fill_viridis_d() +
+  labs(x = "Spotify Timbre Coefficients", y = "", fill = "Album")
+```
+
+Clustering and Conclusion
+=====================================  
+
+Sidebar {.sidebar}
+------------------------------------- 
+
+After seeing the importance of timbre components for identifying the sound of Radiohead, let's see what a random forest model has to say about the importance of different features. In the top 3 most important features, we can see second and sixth timbre component and loudness. The second timbre component, as you might remember, was also important in making a connection between Kid A/Amnesiac and In Rainbows/A Moon Shaped Pool. In the overlap plot, we can see that these three components together cause a nice overlap between every album we have discussed thus far. 
+
+So, did we figure out the secret to the sound of Radiohead? Sadly, as I said before, the second and sixth timbre component don't have a clear definition and loudness isn't really a telling factor about a piece of music. However, there is one thing we have learned: some Radiohead albums do actually sound alike, as we can see in the similarity of multiple features in different albums. What this sound is, isn't defined as of yet, but the fact that the connection is there to begin with and that my hypothesis has been confirmed is a satisfying conclusion.
+
+Column {.tabset}
+------------------------------------- 
+
+```{r}
+get_conf_mat <- function(fit) {
+  outcome <- .get_tune_outcome_names(fit)
+  fit |> 
+    collect_predictions() |> 
+    conf_mat(truth = outcome, estimate = .pred_class)
+}  
+
+get_pr <- function(fit) {
+  fit |> 
+    conf_mat_resampled() |> 
+    group_by(Prediction) |> mutate(precision = Freq / sum(Freq)) |> 
+    group_by(Truth) |> mutate(recall = Freq / sum(Freq)) |> 
+    ungroup() |> filter(Prediction == Truth) |> 
+    select(class = Prediction, precision, recall)
+}  
+
+radiohead_temp2 <- radiohead_temp |>
+  add_audio_analysis()
+
+radiohead_features2 <-
+  radiohead_temp2 |>
+  # For your portfolio, change this to the name of your corpus.
+  mutate(
+    playlist_name = factor(playlist_name),
+    segments = map2(segments, key, compmus_c_transpose),
+    pitches =
+      map(
+        segments,
+        compmus_summarise, pitches,
+        method = "mean", norm = "manhattan"
+      ),
+    timbre =
+      map(
+        segments,
+        compmus_summarise, timbre,
+        method = "mean",
+      )
+  ) |>
+  mutate(pitches = map(pitches, compmus_normalise, "clr")) |>
+  mutate_at(vars(pitches, timbre), map, bind_rows) |>
+  unnest(cols = c(pitches, timbre))
+```
+
+```{r}
+radiohead_recipe <-
+  recipe(
+    playlist_name ~
+      danceability +
+      energy +
+      loudness +
+      speechiness +
+      acousticness +
+      instrumentalness +
+      liveness +
+      valence +
+      tempo +
+      duration +
+      C + `C#|Db` + D + `D#|Eb` +
+      E + `F` + `F#|Gb` + G +
+      `G#|Ab` + A + `A#|Bb` + B +
+      c01 + c02 + c03 + c04 + c05 + c06 +
+      c07 + c08 + c09 + c10 + c11 + c12,
+    data = radiohead_features2           # Use the same name as the previous block.
+  ) |>
+  step_center(all_predictors()) |>
+  step_scale(all_predictors())      # Converts to z-scores.
+  # step_range(all_predictors())    # Sets range to [0, 1].
+
+radiohead_cv <- radiohead_features2 |> vfold_cv(5)
+
+forest_model <-
+  rand_forest() |>
+  set_mode("classification") |> 
+  set_engine("ranger", importance = "impurity")
+radiohead_forest <- 
+  workflow() |> 
+  add_recipe(radiohead_recipe) |> 
+  add_model(forest_model) |> 
+  fit_resamples(
+    radiohead_cv, 
+    control = control_resamples(save_pred = TRUE)
+  )
+```
+
+### Feature Importance
+
+```{r}
+workflow() |> 
+  add_recipe(radiohead_recipe) |> 
+  add_model(forest_model) |> 
+  fit(radiohead_features2) |> 
+  pluck("fit", "fit", "fit") |>
+  ranger::importance() |> 
+  enframe() |> 
+  mutate(name = fct_reorder(name, value)) |> 
+  ggplot(aes(name, value)) + 
+  geom_col() + 
+  coord_flip() +
+  theme_minimal() +
+  labs(x = NULL, y = "Importance")
+```
+
+### Feature Importance Overlap
+
+```{r}
+radiohead_features2 |>
+  ggplot(aes(x = c02, y = c06, colour = playlist_name, size = loudness)) +
+  geom_point(alpha = 0.8) +
+  scale_color_viridis_d() +
+  labs(
+    x = "Timbre Component 2",
+    y = "Timbre Component 6",
+    size = "Loudness",
+    colour = "Album"
+  )
 ```
