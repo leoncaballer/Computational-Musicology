@@ -555,7 +555,7 @@ scatter_matrix <- plot_ly(
 scatter_matrix
 ```
 
-# Chart 1 {data-navmenu="Page 3"}
+# Blow Out - Remix {data-navmenu="Page 3"}
 
 Sidebar {.sidebar}
 -------------------------------------  
@@ -633,7 +633,7 @@ blowout |>
 ```
 
 
-# Chart 2 {data-navmenu="Page 3"}
+# Just {data-navmenu="Page 3"}
 
 Sidebar {.sidebar}
 -------------------------------------  
@@ -710,7 +710,7 @@ just |>
   labs(x = "", y = "")
 ```
 
-# Chart 3 {data-navmenu="Page 3"}
+# Man of War {data-navmenu="Page 3"}
 
 Sidebar {.sidebar}
 -------------------------------------  
@@ -787,7 +787,7 @@ manofwar |>
   labs(x = "", y = "")
 ```
 
-# Chart 4 {data-navmenu="Page 3"}
+# Motion Picture Soundtrack {data-navmenu="Page 3"}
 
 Sidebar {.sidebar}
 -------------------------------------  
@@ -864,12 +864,12 @@ motionpicture |>
   labs(x = "", y = "")
 ```
 
-# Chart 5 {data-navmenu="Page 3"}
+# A Wolf At the Door {data-navmenu="Page 3"}
 
 Sidebar {.sidebar}
 -------------------------------------  
 
-This track contains
+This track contains what I find one of Thom Yorke's most interesting vocal performances, as the way he sings/speaks in the first part is unlike anything else in the band's discography. This performance is marked by the second square in the Self-Similarity Matrix and is followed by an almost hypnotic chant that appears roughly halfway through the song. This chant starts out calm but quickly escalates to the final part of the song. The final part contains a similarly interesting performance, this time backed up by background vocals that make it sound more melancholic and haunting, yet at the same time strangely hopeful. This track is also the final track on the album Hail to the Thief, closing off the album with strange, mixed feelings. 
 
 Column {.tabset}
 ------------------------------------- 
@@ -941,12 +941,12 @@ wolf |>
   labs(x = "", y = "")
 ```
 
-# Chart 6 {data-navmenu="Page 3"}
+# Weird Fishes/Arpeggi {data-navmenu="Page 3"}
 
 Sidebar {.sidebar}
 -------------------------------------  
 
-The first track, Blow Out, although 
+Weird Fishes/Arpeggi is my favorite piece of music ever, yet I have always found it hard to describe this song in words. The feeling it gives me is best described as the gray area between hopefulness and despair, something similar to what's described by the lyrics: 'everybody leaves, if they get the chance. And this is my chance'. Because I don't think words can truly do the meaning of this piece justice, it's more suitable just to analyze the technical components. The main part of this song is characterised by a guitar playing arpeggiated chords, meaning that each note in a chord is played progressively rising or descending, rather than all at once, as is more common. This pattern is fairly simple and can be seen in the Chromagram as it repeats for about the first 2 minutes of the song. Following this section, another guitar starts playing arpeggiated chords softly in the background, causing a compounding effect that sounds incredible. In the next section, the drumming ceases for a while before suddenly continuing at exactly 3 minutes and 41 seconds, starting the final section of the song, where everything comes together: guitars, keyboards, drums, and vocals all create a beautiful, arpeggiated conclusion to my favorite song of all time. 
 
 Column {.tabset}
 ------------------------------------- 
@@ -1018,12 +1018,12 @@ weirdfishes |>
   labs(x = "", y = "")
 ```
 
-# Chart 7 {data-navmenu="Page 3"}
+# Separator {data-navmenu="Page 3"}
 
 Sidebar {.sidebar}
 -------------------------------------  
 
-The first track, Blow Out, although 
+The King of Limbs may be Radiohead's most controversial album, as it saw them piecing together music on a computer using looped tracks. The specific producing technique used in this album caused most of it to sound repetitive and not like any other Radiohead album at the time. Although it is my personal least favorite album by the band, it still contains some beautiful pieces of music. The looping structure of this song is clearly visible in the Chromagram and Self-Similarity Matrix. Both contain near-consistent patterns: the Chromagram has yellow clear lines on C and A# throughout almost the entire track and the Self-Similarity Matrix contains tons of little squares. 
 
 Column {.tabset}
 ------------------------------------- 
@@ -1031,13 +1031,13 @@ Column {.tabset}
 ### Chromagram
 
 ```{r}
-littlebylittle <-
-  get_tidy_audio_analysis("1R5qCDSE1XEiSDMkA0LAhf") |>
+separator <-
+  get_tidy_audio_analysis("2fV57qob1dYMJKEfTwHOt1") |>
   select(segments) |>
   unnest(segments) |>
   select(start, duration, pitches)
 
-littlebylittle |>
+separator |>
   mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |>
   compmus_gather_chroma() |> 
   ggplot(
@@ -1049,7 +1049,7 @@ littlebylittle |>
     )
   ) +
   geom_tile() +
-  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title="Little by Little") +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title="Separator") +
   theme_minimal() +
   scale_fill_viridis_c()
 ```
@@ -1057,8 +1057,8 @@ littlebylittle |>
 ### SSM
 
 ```{r}
-littlebylittle <-
-  get_tidy_audio_analysis("1R5qCDSE1XEiSDMkA0LAhf") |> # Change URI.
+separator <-
+  get_tidy_audio_analysis("2fV57qob1dYMJKEfTwHOt1") |> # Change URI.
   compmus_align(bars, segments) |>                     # Change `bars`
   select(bars) |>                                      #   in all three
   unnest(bars) |>                                      #   of these lines.
@@ -1077,7 +1077,7 @@ littlebylittle <-
       )
   )
 
-littlebylittle |>
+separator |>
   compmus_self_similarity(timbre, "cosine") |> 
   ggplot(
     aes(
@@ -1095,11 +1095,12 @@ littlebylittle |>
   labs(x = "", y = "")
 ```
 
-# Chart 8 {data-navmenu="Page 3"}
+# Ful Stop {data-navmenu="Page 3"}
 
 Sidebar {.sidebar}
 -------------------------------------  
 
+Although the Self-Similarity Matrix of this track looks like a piece of art on its own, it is not very telling. The biggest transition in the piece, which occurs at 3:11, where bass and, subsequently, kick in, and the tempo picks up, is not really visible from both visualisations. 
 
 Column {.tabset}
 ------------------------------------- 
@@ -1178,7 +1179,7 @@ Page 4
 Sidebar {.sidebar}
 -------------------------------------  
 
-To see another aspect of the change in Radiohead's sound, let's compare the tempo and duration of their first and final album. 
+Now that we looked at some individual pieces from Radiohead's discography, let's take a look at how their music has changed throughout the years on a more general level. 
 
 Column {.tabset}
 -------------------------------------
@@ -1194,153 +1195,153 @@ radiohead3 <- bind_rows(inrainbows, thekingoflimbs, amoonshapedpool)
 ```   
 
 ```{r}
-# radiohead1 |>
-#   mutate(
-#     sections =
-#       map(
-#         sections,                                    # sections or segments
-#         summarise_at,
-#         vars(tempo, loudness, duration),             # features of interest
-#         list(section_mean = mean, section_sd = sd)   # aggregation functions
-#       )
-#   ) |>
-#   unnest(sections) |>
-#   ggplot(
-#     aes(
-#       x = tempo,
-#       y = tempo_section_sd,
-#       colour = playlist_name,
-#       alpha = loudness
-#     )
-#   ) +
-#   geom_point(aes(size = duration / 60)) +
-#   geom_rug() +
-#   theme_minimal() +
-#   ylim(0, 5) +
-#   labs(
-#     x = "Mean Tempo (bpm)",
-#     y = "SD Tempo",
-#     colour = "Album",
-#     size = "Duration (min)",
-#     alpha = "Volume (dBFS)"
-#   )
-# 
-# radiohead2 |>
-#   mutate(
-#     sections =
-#       map(
-#         sections,                                    # sections or segments
-#         summarise_at,
-#         vars(tempo, loudness, duration),             # features of interest
-#         list(section_mean = mean, section_sd = sd)   # aggregation functions
-#       )
-#   ) |>
-#   unnest(sections) |>
-#   ggplot(
-#     aes(
-#       x = tempo,
-#       y = tempo_section_sd,
-#       colour = playlist_name,
-#       alpha = loudness
-#     )
-#   ) +
-#   geom_point(aes(size = duration / 60)) +
-#   geom_rug() +
-#   theme_minimal() +
-#   ylim(0, 5) +
-#   labs(
-#     x = "Mean Tempo (bpm)",
-#     y = "SD Tempo",
-#     colour = "Album",
-#     size = "Duration (min)",
-#     alpha = "Volume (dBFS)"
-#   )
-# 
-# radiohead3 |>
-#   mutate(
-#     sections =
-#       map(
-#         sections,                                    # sections or segments
-#         summarise_at,
-#         vars(tempo, loudness, duration),             # features of interest
-#         list(section_mean = mean, section_sd = sd)   # aggregation functions
-#       )
-#   ) |>
-#   unnest(sections) |>
-#   ggplot(
-#     aes(
-#       x = tempo,
-#       y = tempo_section_sd,
-#       colour = playlist_name,
-#       alpha = loudness
-#     )
-#   ) +
-#   geom_point(aes(size = duration / 60)) +
-#   geom_rug() +
-#   theme_minimal() +
-#   ylim(0, 5) +
-#   labs(
-#     x = "Mean Tempo (bpm)",
-#     y = "SD Tempo",
-#     colour = "Album",
-#     size = "Duration (min)",
-#     alpha = "Volume (dBFS)"
-#   )
+radiohead1 |>
+  mutate(
+    sections =
+      map(
+        sections,                                    # sections or segments
+        summarise_at,
+        vars(tempo, loudness, duration),             # features of interest
+        list(section_mean = mean, section_sd = sd)   # aggregation functions
+      )
+  ) |>
+  unnest(sections) |>
+  ggplot(
+    aes(
+      x = tempo,
+      y = tempo_section_sd,
+      colour = playlist_name,
+      alpha = loudness
+    )
+  ) +
+  geom_point(aes(size = duration / 60)) +
+  geom_rug() +
+  theme_minimal() +
+  ylim(0, 5) +
+  labs(
+    x = "Mean Tempo (bpm)",
+    y = "SD Tempo",
+    colour = "Album",
+    size = "Duration (min)",
+    alpha = "Volume (dBFS)"
+  )
+
+radiohead2 |>
+  mutate(
+    sections =
+      map(
+        sections,                                    # sections or segments
+        summarise_at,
+        vars(tempo, loudness, duration),             # features of interest
+        list(section_mean = mean, section_sd = sd)   # aggregation functions
+      )
+  ) |>
+  unnest(sections) |>
+  ggplot(
+    aes(
+      x = tempo,
+      y = tempo_section_sd,
+      colour = playlist_name,
+      alpha = loudness
+    )
+  ) +
+  geom_point(aes(size = duration / 60)) +
+  geom_rug() +
+  theme_minimal() +
+  ylim(0, 5) +
+  labs(
+    x = "Mean Tempo (bpm)",
+    y = "SD Tempo",
+    colour = "Album",
+    size = "Duration (min)",
+    alpha = "Volume (dBFS)"
+  )
+
+radiohead3 |>
+  mutate(
+    sections =
+      map(
+        sections,                                    # sections or segments
+        summarise_at,
+        vars(tempo, loudness, duration),             # features of interest
+        list(section_mean = mean, section_sd = sd)   # aggregation functions
+      )
+  ) |>
+  unnest(sections) |>
+  ggplot(
+    aes(
+      x = tempo,
+      y = tempo_section_sd,
+      colour = playlist_name,
+      alpha = loudness
+    )
+  ) +
+  geom_point(aes(size = duration / 60)) +
+  geom_rug() +
+  theme_minimal() +
+  ylim(0, 5) +
+  labs(
+    x = "Mean Tempo (bpm)",
+    y = "SD Tempo",
+    colour = "Album",
+    size = "Duration (min)",
+    alpha = "Volume (dBFS)"
+  )
 ```
 
 ### Chart 2
 
 ```{r}
-# radiohead1 |>
-#   mutate(
-#     timbre =
-#       map(
-#         segments,
-#         compmus_summarise,
-#         timbre,
-#         method = "mean"
-#       )
-#   ) |>
-#   select(playlist_name, timbre) |>
-#   compmus_gather_timbre() |>
-#   ggplot(aes(x = basis, y = value, fill = playlist_name)) +
-#   geom_violin() +
-#   scale_fill_viridis_d() +
-#   labs(x = "Spotify Timbre Coefficients", y = "", fill = "Album")
-# 
-# radiohead2 |>
-#   mutate(
-#     timbre =
-#       map(
-#         segments,
-#         compmus_summarise,
-#         timbre,
-#         method = "mean"
-#       )
-#   ) |>
-#   select(playlist_name, timbre) |>
-#   compmus_gather_timbre() |>
-#   ggplot(aes(x = basis, y = value, fill = playlist_name)) +
-#   geom_violin() +
-#   scale_fill_viridis_d() +
-#   labs(x = "Spotify Timbre Coefficients", y = "", fill = "Album")
-# 
-# radiohead3 |>
-#   mutate(
-#     timbre =
-#       map(
-#         segments,
-#         compmus_summarise,
-#         timbre,
-#         method = "mean"
-#       )
-#   ) |>
-#   select(playlist_name, timbre) |>
-#   compmus_gather_timbre() |>
-#   ggplot(aes(x = basis, y = value, fill = playlist_name)) +
-#   geom_violin() +
-#   scale_fill_viridis_d() +
-#   labs(x = "Spotify Timbre Coefficients", y = "", fill = "Album")
+radiohead1 |>
+  mutate(
+    timbre =
+      map(
+        segments,
+        compmus_summarise,
+        timbre,
+        method = "mean"
+      )
+  ) |>
+  select(playlist_name, timbre) |>
+  compmus_gather_timbre() |>
+  ggplot(aes(x = basis, y = value, fill = playlist_name)) +
+  geom_violin() +
+  scale_fill_viridis_d() +
+  labs(x = "Spotify Timbre Coefficients", y = "", fill = "Album")
+
+radiohead2 |>
+  mutate(
+    timbre =
+      map(
+        segments,
+        compmus_summarise,
+        timbre,
+        method = "mean"
+      )
+  ) |>
+  select(playlist_name, timbre) |>
+  compmus_gather_timbre() |>
+  ggplot(aes(x = basis, y = value, fill = playlist_name)) +
+  geom_violin() +
+  scale_fill_viridis_d() +
+  labs(x = "Spotify Timbre Coefficients", y = "", fill = "Album")
+
+radiohead3 |>
+  mutate(
+    timbre =
+      map(
+        segments,
+        compmus_summarise,
+        timbre,
+        method = "mean"
+      )
+  ) |>
+  select(playlist_name, timbre) |>
+  compmus_gather_timbre() |>
+  ggplot(aes(x = basis, y = value, fill = playlist_name)) +
+  geom_violin() +
+  scale_fill_viridis_d() +
+  labs(x = "Spotify Timbre Coefficients", y = "", fill = "Album")
 ```
 
 Page 5
@@ -1349,7 +1350,7 @@ Page 5
 Sidebar {.sidebar}
 -------------------------------------  
 
-When discussing the complexity of Radiohead songs, one song in particular never fails to be mentioned: Paranoid Android. This song contains significant tempo changes that are pulled off very well, hopefully also making them visible in the tempogram. Most sources online tell that this song has a BPM of around 84. That's how the song starts out at least. After around 3 and a half minutes, the tempo slows down to around 63 BPM, before returning to it's original state for the final section of the song. This is represented in a somewhat vague way in the tempogram, so let me explain. The yellow lines around 330 and 250 BPM are multiples of the original tempo's of the song: 84 and 62 BPM. This is figured out in the second visualization, where the first tempo is correct, but the second tempo is still visualized in double-time. The coda of this piece is presumably a mystery to the computer, as there is no clear yellow line visible in this part.
+When discussing the complexity of Radiohead songs, one song in particular never fails to be mentioned: Paranoid Android. This song contains significant tempo changes that are pulled off very well, hopefully also making them visible in the Tempogram. Most sources online tell that this song has a BPM of around 84. That's how the song starts out at least. After around 3 and a half minutes, the tempo slows down to around 63 BPM, before returning to it's original state for the final section of the song. This is represented in a somewhat vague way in the Tempogram, so let me explain. The yellow lines around 330 and 250 BPM are multiples of the original tempo's of the song: 84 and 62 BPM. This is figured out in the second visualization, where the first tempo is correct, but the second tempo is still visualized in double-time. The coda of this piece is presumably a mystery to the computer, as there is no clear yellow line visible in this part.
 
 Column {.tabset}
 -------------------------------------
@@ -1357,25 +1358,25 @@ Column {.tabset}
 ### Chart 1
 
 ```{r}
-# paranoid |>
-#   tempogram(window_size = 8, hop_size = 1, cyclic = TRUE) |>
-#   ggplot(aes(x = time, y = bpm, fill = power)) +
-#   geom_raster() +
-#   scale_fill_viridis_c(guide = "none") +
-#   labs(x = "Time (s)", y = "Tempo (BPM)") +
-#   theme_classic()
+paranoid <- get_tidy_audio_analysis("6LgJvl0Xdtc73RJ1mmpotq")
+
+paranoid |>
+  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
+  ggplot(aes(x = time, y = bpm, fill = power)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "Tempo (BPM)") +
+  theme_classic()
 ```   
 
 ### Chart 2
 
 ```{r}
-# paranoid <- get_tidy_audio_analysis("6LgJvl0Xdtc73RJ1mmpotq")
-# 
-# paranoid |>
-#   tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
-#   ggplot(aes(x = time, y = bpm, fill = power)) +
-#   geom_raster() +
-#   scale_fill_viridis_c(guide = "none") +
-#   labs(x = "Time (s)", y = "Tempo (BPM)") +
-#   theme_classic()
+paranoid |>
+  tempogram(window_size = 8, hop_size = 1, cyclic = TRUE) |>
+  ggplot(aes(x = time, y = bpm, fill = power)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "Tempo (BPM)") +
+  theme_classic()
 ```
