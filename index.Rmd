@@ -30,136 +30,25 @@ thekingoflimbs <- get_playlist_audio_features("", "4S60o4zSaeMfMYwi5Ndxqf")
 amoonshapedpool <- get_playlist_audio_features("", "0rllYNwldDnjrOGx03VMnc")
 ```
 
-Page 7
-=====================================     
-
-Sidebar {.sidebar}
--------------------------------------
-
-
-Column {.tabset}
--------------------------------------
-
 ```{r}
-get_conf_mat <- function(fit) {
-  outcome <- .get_tune_outcome_names(fit)
-  fit |> 
-    collect_predictions() |> 
-    conf_mat(truth = outcome, estimate = .pred_class)
-}  
-
-get_pr <- function(fit) {
-  fit |> 
-    conf_mat_resampled() |> 
-    group_by(Prediction) |> mutate(precision = Freq / sum(Freq)) |> 
-    group_by(Truth) |> mutate(recall = Freq / sum(Freq)) |> 
-    ungroup() |> filter(Prediction == Truth) |> 
-    select(class = Prediction, precision, recall)
-}  
-
-radiohead <-
-  thebends |>
-  add_audio_analysis() |>
-  mutate(
-    segments = map2(segments, key, compmus_c_transpose),
-    pitches =
-      map(segments,
-        compmus_summarise, pitches,
-        method = "mean", norm = "manhattan"
-      ),
-    timbre =
-      map(
-        segments,
-        compmus_summarise, timbre,
-        method = "mean"
-      )
-  ) |>
-  mutate(pitches = map(pitches, compmus_normalise, "clr")) |>
-  mutate_at(vars(pitches, timbre), map, bind_rows) |>
-  unnest(cols = c(pitches, timbre))
-
-halloween_juice <-
-  recipe(
-    track.name ~
-      danceability +
-      energy +
-      loudness +
-      speechiness +
-      acousticness +
-      instrumentalness +
-      liveness +
-      valence +
-      tempo +
-      duration +
-      C + `C#|Db` + D + `D#|Eb` +
-      E + `F` + `F#|Gb` + G +
-      `G#|Ab` + A + `A#|Bb` + B +
-      c01 + c02 + c03 + c04 + c05 + c06 +
-      c07 + c08 + c09 + c10 + c11 + c12,
-    data = radiohead
-  ) |>
-  step_center(all_predictors()) |>
-  step_scale(all_predictors()) |> 
-  # step_range(all_predictors()) |> 
-  prep(radiohead |> mutate(track.name = str_trunc(track.name, 20))) |>
-  juice() |>
-  column_to_rownames("track.name")
+# pablohoney <- pablohoney |>
+#   add_audio_analysis()
+# thebends <- thebends |>
+#   add_audio_analysis()
+# okcomputer <- okcomputer |>
+#   add_audio_analysis()
+# kidamnesiac <- kidamnesiac |>
+#   add_audio_analysis()
+# hailtothethief <- hailtothethief |> 
+#   add_audio_analysis()
+# inrainbows <- inrainbows |> 
+#   add_audio_analysis()
+# thekingoflimbs <- thekingoflimbs |>  
+#   add_audio_analysis()
+# amoonshapedpool <- amoonshapedpool |> 
+#   add_audio_analysis()
 ```
 
-```{r}
-halloween_dist <- dist(halloween_juice, method = "euclidean")
-
-halloween_dist |> 
-  hclust(method = "single") |> # Try single, average, and complete.
-  dendro_data() |>
-  ggdendrogram()
-```
-
-```{r}
-# heatmaply(
-#   halloween_juice,
-#   hclustfun = hclust,
-#   hclust_method = "average",  # Change for single, average, or complete linkage.
-#   dist_method = "euclidean"
-# )
-```
-
-Page 6
-=====================================     
-
-Sidebar {.sidebar}
--------------------------------------  
-
-When discussing the complexity of Radiohead songs, one song in particular never fails to be mentioned: Paranoid Android. This song contains significant tempo changes that are pulled off very well, hopefully also making them visible in the tempogram. Most sources online tell that this song has a BPM of around 84. That's how the song starts out at least. After around 3 and a half minutes, the tempo slows down to around 63 BPM, before returning to it's original state for the final section of the song. This is represented in a somewhat vague way in the tempogram, so let me explain. The yellow lines around 330 and 250 BPM are multiples of the original tempo's of the song: 84 and 62 BPM. This is figured out in the second visualization, where the first tempo is correct, but the second tempo is still visualized in double-time. The coda of this piece is presumably a mystery to the computer, as there is no clear yellow line visible in this part.
-
-Column {.tabset}
--------------------------------------
-
-### Chart 1
-
-```{r}
-# paranoid |>
-#   tempogram(window_size = 8, hop_size = 1, cyclic = TRUE) |>
-#   ggplot(aes(x = time, y = bpm, fill = power)) +
-#   geom_raster() +
-#   scale_fill_viridis_c(guide = "none") +
-#   labs(x = "Time (s)", y = "Tempo (BPM)") +
-#   theme_classic()
-```   
-
-### Chart 2
-
-```{r}
-# paranoid <- get_tidy_audio_analysis("6LgJvl0Xdtc73RJ1mmpotq")
-# 
-# paranoid |>
-#   tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
-#   ggplot(aes(x = time, y = bpm, fill = power)) +
-#   geom_raster() +
-#   scale_fill_viridis_c(guide = "none") +
-#   labs(x = "Time (s)", y = "Tempo (BPM)") +
-#   theme_classic()
-```
     
 Page 1
 =====================================  
@@ -171,8 +60,10 @@ Over the years, Radiohead has been lauded as one of the best bands of all time b
 
 In this project, I want to show you how the sound of Radiohead has changed from their first album, Pablo Honey, to their most recent release, A Moon Shaped Pool. We'll find out exactly what makes each of their albums special through Spotify's intricate track analysis features. 
 
+I chose to analyze Radiohead for this project because they are one of my favorite bands, so besides finding out about their musical evolution, I also hope to find out some things about my personal listening behavior and be able to express those alongside the facts about Radiohead. 
+
 ```{=html}
-<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/2N2R2saYKqgO91e1LK4jvp?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+<iframe src="https://open.spotify.com/embed/playlist/1hOCJdAtWmTl2Een00H0wV?utm_source=generator&theme=0" width="100%" height="380" frameBorder="0" allowtransparency="true" allow="encrypted-media" data-external="1"></iframe>
 ```
 
 Column
@@ -212,11 +103,12 @@ Sidebar {.sidebar data-width=400px}
 
 Let's first take a look at some basic features of Radiohead's 8 main releases, ranging from 1993 to 2016. Their first album, Pablo Honey, contains all the characteristics one would expect from the grungy alternative rock album it is. All the songs are relatively high in energy and valence and the majority of the tracks fall within the major mode. In comparison to later albums, the tracks are all pretty loud as well. 
 
-This trend then continues on through the next 2 albums, The Bends and OK Computer, although some exceptions to the rule become clear. Both albums contain more songs with a low energy and a low valence. Now, a shift in tone becomes clear. The next album, Kid A Mnesiac (A double album containing two previously individual releases Kid A and Amnesiac), almost entirely consists of songs on the lower end of the valence and energy spectrum. These albums marked the band's departure from more standard alternative rock and saw them adapting a sound that was influenced by electronic music from the time. 
+This trend then continues on through the next 2 albums, The Bends and OK Computer, although some exceptions to the rule become clear. Both albums contain more songs with a low energy and a low valence. Now, a shift in tone becomes clear. The next album, Kid A Mnesiac (A double album containing two previously individual releases: Kid A and Amnesiac), almost entirely consists of songs on the lower end of the valence and energy spectrum. These albums marked the band's departure from more standard alternative rock and saw them adapting a sound that was influenced by electronic music from the time. 
 
-Their next album, Hail to the Thief, sees the band returning to the traditional rock sound with more loud, high-energy songs. A return which is somewhat cut short by the next album, In Rainbows, which beautifully combines the band's electronic influences and alternative rock roots into a melancholic masterpiece. Make no mistake though, there are some outliers in this album, which we'll look into at a later time. The King of Limbs is heavily electronic, containing almost no traditional sounds that the listeners were used to at the time. This, along with many collaborations with electronic artists and DJ's, results in a high-energy album that still conveys Radiohead's gloomy sound. The final album in this corpus, A Moon Shaped Pool, is an almost completely gloomy, low-energy, and very quiet album, with one noteable outlier, "Burn the Witch", which we'll look at later. 
+Their next album, Hail to the Thief, sees the band returning to the traditional rock sound with more loud, high-energy songs. A return which is somewhat cut short by the next album, In Rainbows, which beautifully combines the band's electronic influences and alternative rock roots into a melancholic masterpiece. Make no mistake though, there are some outliers in this album. The King of Limbs is heavily electronic, containing almost no traditional sounds that the listeners were used to at the time. This, along with many collaborations with electronic artists and DJ's, results in a high-energy album that still conveys Radiohead's gloomy sound. The final album in this corpus, A Moon Shaped Pool, is an almost completely gloomy, low-energy, and very quiet album, with one noteable outlier, "Burn the Witch".
 
-Clearly, a change in the sound of Radiohead is visible. Now let's find out what that change consists of in more detail, as Spotify's track features guide us along the way
+Radiohead also distinguish themselves from other bands by using relatively complex song structures. It is sometimes argued that this complexity only came to be in their later albums. I, however, think that this is nonsense. To demonstrate this, I could pick out the most musically complex track of every album, but that would defeat the purpose of my argument. Instead, I choose to visualize my favorite track from each album to show that, even in their earlier albums, Radiohead were already handling pretty complex stuff and, on the contrary, that their later albums also contain tracks with a rather simple structure (although this does not take away their beauty whatsoever). 
+In the next section, I will look at the structure and timbre components of 8 of these tracks. 
 
 Column {.tabset}
 -------------------------------------
@@ -242,6 +134,10 @@ custom_text <- paste(
   "<br>Loudness: ", round(pablohoney_df$Loudness, 2)
 )
 
+# Define tick values and labels for the colorbar (only -60 and 0)
+colorbar_ticks <- c(-60, 0)
+colorbar_labels <- as.character(colorbar_ticks)
+
 # Create scatter plot matrix with marker color representing loudness
 scatter_matrix <- plot_ly(
   data = pablohoney_df,
@@ -255,7 +151,11 @@ scatter_matrix <- plot_ly(
     colorscale = "Viridis", # Choose a color scale
     opacity = 0.7,
     size = 8,
-    colorbar = list(title = "Loudness") # Add a color bar with a title
+    colorbar = list(
+      title = "Loudness (High - Low)", # Add a title to the colorbar
+      tickvals = colorbar_ticks, # Specify tick values
+      ticktext = colorbar_labels # Specify tick labels
+    )
   )
 ) %>%
   layout(
@@ -290,6 +190,10 @@ custom_text <- paste(
   "<br>Loudness: ", round(thebends_df$Loudness, 2)
 )
 
+# Define tick values and labels for the colorbar (only -60 and 0)
+colorbar_ticks <- c(-60, 0)
+colorbar_labels <- as.character(colorbar_ticks)
+
 # Create scatter plot matrix with marker color representing loudness
 scatter_matrix <- plot_ly(
   data = thebends_df,
@@ -303,7 +207,11 @@ scatter_matrix <- plot_ly(
     colorscale = "Viridis", # Choose a color scale
     opacity = 0.7,
     size = 8,
-    colorbar = list(title = "Loudness") # Add a color bar with a title
+    colorbar = list(
+      title = "Loudness (High - Low)", # Add a title to the colorbar
+      tickvals = colorbar_ticks, # Specify tick values
+      ticktext = colorbar_labels # Specify tick labels
+    )
   )
 ) %>%
   layout(
@@ -338,6 +246,10 @@ custom_text <- paste(
   "<br>Loudness: ", round(okcomputer_df$Loudness, 2)
 )
 
+# Define tick values and labels for the colorbar (only -60 and 0)
+colorbar_ticks <- c(-60, 0)
+colorbar_labels <- as.character(colorbar_ticks)
+
 # Create scatter plot matrix with marker color representing loudness
 scatter_matrix <- plot_ly(
   data = okcomputer_df,
@@ -351,7 +263,11 @@ scatter_matrix <- plot_ly(
     colorscale = "Viridis", # Choose a color scale
     opacity = 0.7,
     size = 8,
-    colorbar = list(title = "Loudness") # Add a color bar with a title
+    colorbar = list(
+      title = "Loudness (High - Low)", # Add a title to the colorbar
+      tickvals = colorbar_ticks, # Specify tick values
+      ticktext = colorbar_labels # Specify tick labels
+    )
   )
 ) %>%
   layout(
@@ -385,6 +301,10 @@ custom_text <- paste(
   "<br>Loudness: ", round(kidamnesiac_df$Loudness, 2)
 )
 
+# Define tick values and labels for the colorbar (only -60 and 0)
+colorbar_ticks <- c(-60, 0)
+colorbar_labels <- as.character(colorbar_ticks)
+
 # Create scatter plot matrix with marker color representing loudness
 scatter_matrix <- plot_ly(
   data = kidamnesiac_df,
@@ -398,7 +318,11 @@ scatter_matrix <- plot_ly(
     colorscale = "Viridis", # Choose a color scale
     opacity = 0.7,
     size = 8,
-    colorbar = list(title = "Loudness") # Add a color bar with a title
+    colorbar = list(
+      title = "Loudness (High - Low)", # Add a title to the colorbar
+      tickvals = colorbar_ticks, # Specify tick values
+      ticktext = colorbar_labels # Specify tick labels
+    )
   )
 ) %>%
   layout(
@@ -432,6 +356,10 @@ custom_text <- paste(
   "<br>Loudness: ", round(hailtothethief_df$Loudness, 2)
 )
 
+# Define tick values and labels for the colorbar (only -60 and 0)
+colorbar_ticks <- c(-60, 0)
+colorbar_labels <- as.character(colorbar_ticks)
+
 # Create scatter plot matrix with marker color representing loudness
 scatter_matrix <- plot_ly(
   data = hailtothethief_df,
@@ -445,7 +373,11 @@ scatter_matrix <- plot_ly(
     colorscale = "Viridis", # Choose a color scale
     opacity = 0.7,
     size = 8,
-    colorbar = list(title = "Loudness") # Add a color bar with a title
+    colorbar = list(
+      title = "Loudness (High - Low)", # Add a title to the colorbar
+      tickvals = colorbar_ticks, # Specify tick values
+      ticktext = colorbar_labels # Specify tick labels
+    )
   )
 ) %>%
   layout(
@@ -479,6 +411,10 @@ custom_text <- paste(
   "<br>Loudness: ", round(inrainbows_df$Loudness, 2)
 )
 
+# Define tick values and labels for the colorbar (only -60 and 0)
+colorbar_ticks <- c(-60, 0)
+colorbar_labels <- as.character(colorbar_ticks)
+
 # Create scatter plot matrix with marker color representing loudness
 scatter_matrix <- plot_ly(
   data = inrainbows_df,
@@ -492,7 +428,11 @@ scatter_matrix <- plot_ly(
     colorscale = "Viridis", # Choose a color scale
     opacity = 0.7,
     size = 8,
-    colorbar = list(title = "Loudness") # Add a color bar with a title
+    colorbar = list(
+      title = "Loudness (High - Low)", # Add a title to the colorbar
+      tickvals = colorbar_ticks, # Specify tick values
+      ticktext = colorbar_labels # Specify tick labels
+    )
   )
 ) %>%
   layout(
@@ -503,7 +443,6 @@ scatter_matrix <- plot_ly(
 
 # Print the scatter plot matrix
 scatter_matrix
-
 ```
 
 ### The King of Limbs
@@ -527,6 +466,10 @@ custom_text <- paste(
   "<br>Loudness: ", round(thekingoflimbs_df$Loudness, 2)
 )
 
+# Define tick values and labels for the colorbar (only -60 and 0)
+colorbar_ticks <- c(-60, 0)
+colorbar_labels <- as.character(colorbar_ticks)
+
 # Create scatter plot matrix with marker color representing loudness
 scatter_matrix <- plot_ly(
   data = thekingoflimbs_df,
@@ -540,7 +483,11 @@ scatter_matrix <- plot_ly(
     colorscale = "Viridis", # Choose a color scale
     opacity = 0.7,
     size = 8,
-    colorbar = list(title = "Loudness") # Add a color bar with a title
+    colorbar = list(
+      title = "Loudness (High - Low)", # Add a title to the colorbar
+      tickvals = colorbar_ticks, # Specify tick values
+      ticktext = colorbar_labels # Specify tick labels
+    )
   )
 ) %>%
   layout(
@@ -574,6 +521,10 @@ custom_text <- paste(
   "<br>Loudness: ", round(amoonshapedpool_df$Loudness, 2)
 )
 
+# Define tick values and labels for the colorbar (only -60 and 0)
+colorbar_ticks <- c(-60, 0)
+colorbar_labels <- as.character(colorbar_ticks)
+
 # Create scatter plot matrix with marker color representing loudness
 scatter_matrix <- plot_ly(
   data = amoonshapedpool_df,
@@ -587,7 +538,11 @@ scatter_matrix <- plot_ly(
     colorscale = "Viridis", # Choose a color scale
     opacity = 0.7,
     size = 8,
-    colorbar = list(title = "Loudness") # Add a color bar with a title
+    colorbar = list(
+      title = "Loudness (High - Low)", # Add a title to the colorbar
+      tickvals = colorbar_ticks, # Specify tick values
+      ticktext = colorbar_labels # Specify tick labels
+    )
   )
 ) %>%
   layout(
@@ -600,26 +555,26 @@ scatter_matrix <- plot_ly(
 scatter_matrix
 ```
 
-Page 3
-=====================================     
+# Chart 1 {data-navmenu="Page 3"}
 
 Sidebar {.sidebar}
 -------------------------------------  
-A good example of the complex structures that Radiohead use in their songs is 'Sail to the Moon', which contains a shift from A major tonality to A minor tonality. The songs starts with an A major chord, from the A major key, and continues with A C major and F major chord, from the A minor key. The complexity of this song is caught very well by the chromagram, as we see the song constantly switching between chords. 
+
+The first track we'll analyse is Blow Out, which, although not very complex musically, more than makes up for that in its overall sound. The song starts out with a simple build-up of around a minute. This build-up corresponds with the first square in the Self-Similarity Matrix. After this, the guitarists break down into a noisy, chaotic part of the song, which is visibly harder to differentiate in the Chromagram. The yellow lines that were clearly visible in the previous part are now more vaguely defined, corresponding to the noise that is introduced in this part of the song. The build-up then repeats until around the 2 and a half minute mark, where the song breaks down again. A siren-like guitar noise is introduced, causing the vagueness of the chromagram to increase once more up until the final strum.
 
 Column {.tabset}
--------------------------------------
+------------------------------------- 
 
-### Chart 1
+### Chromagram
 
 ```{r}
-sailtothemoon <-
-  get_tidy_audio_analysis("7tFsUfrmyBvLdvIByreecz") |>
+blowout <-
+  get_tidy_audio_analysis("1XO6WiimPgd8X7znxfK7fC") |>
   select(segments) |>
   unnest(segments) |>
   select(start, duration, pitches)
 
-sailtothemoon |>
+blowout |>
   mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |>
   compmus_gather_chroma() |> 
   ggplot(
@@ -631,37 +586,16 @@ sailtothemoon |>
     )
   ) +
   geom_tile() +
-  labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title="Blow Out - Remix") +
   theme_minimal() +
   scale_fill_viridis_c()
 ```
 
-### Chart 2
+### SSM
 
 ```{r}
-```   
-    
-### Chart 3
-
-```{r}
-```
-
-Page 4
-=====================================     
-
-Sidebar {.sidebar}
--------------------------------------  
-
-Here you'll find the Self-Similarity Matrix and Cepstogram of the track 'Bodysnatchers', from 'In Rainbows'. This track is one of the outliers from the relatively low-energy, ethereal sound I talked about in the introduction and is instead characterized by loud guitars, bass, and hectic drums. This is represented in the Cepstogram, where the first timbre component (loudness) is almost entirely colored yellow or green-ish. The return to blue at around 120 seconds for the third and seventh timbre component is explained by a relatively calm part of the song. The loudness of the song is also characterized by the Self-Similarity Matrix, which is almost entirely dark blue, except for the final few seconds, where it switches over to yellow. The final few seconds of the song are complete silence, which contrasts heavily with the loudness of the previous parts of the song, thus explaining a similar contrast in the Matrix.
-
-Column {.tabset}
--------------------------------------
-
-### Chart 1
-
-```{r}
-bodysnatchers <-
-  get_tidy_audio_analysis("4pWIwnnqx8k01fuF95UMIg") |> # Change URI.
+blowout <-
+  get_tidy_audio_analysis("1XO6WiimPgd8X7znxfK7fC") |> # Change URI.
   compmus_align(bars, segments) |>                     # Change `bars`
   select(bars) |>                                      #   in all three
   unnest(bars) |>                                      #   of these lines.
@@ -680,7 +614,7 @@ bodysnatchers <-
       )
   )
 
-bodysnatchers |>
+blowout |>
   compmus_self_similarity(timbre, "cosine") |> 
   ggplot(
     aes(
@@ -698,17 +632,547 @@ bodysnatchers |>
   labs(x = "", y = "")
 ```
 
-### Chart 2
+
+# Chart 2 {data-navmenu="Page 3"}
+
+Sidebar {.sidebar}
+-------------------------------------  
+
+Resulting from a competition between two band members to see who could come up with the weirdest chord progression, Just is one of the most musically complex tracks of the band's sophomore album, The Bends. This complexity is clearly visible in the chromagram, which is nearly unintelligible. Luckily, the Self-Similarity Matrix can provide some insight into the roughly nine sections of this track. The first part consists of a small, noisy build-up, which transitions into the pre-chorus followed by the chorus. This chorus is rather interesting, because it is brought back three times in the song, with each subsequent appearance taking just a bit longer than the previous. The choruses in this track correspond to the third, fifth, and seventh square in the Self-Similarity Matrix respectively. Just before the final chorus, the song halts for just a bit, resulting in the characteristic yellow line at around 145 seconds into the song. 
+
+Column {.tabset}
+------------------------------------- 
+
+### Chromagram
 
 ```{r}
-```   
-    
-### Chart 3
+just <-
+  get_tidy_audio_analysis("1dyTcli07c77mtQK3ahUZR") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
 
-```{r}
+just |>
+  mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |>
+  compmus_gather_chroma() |> 
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = pitch_class,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title="Just") +
+  theme_minimal() +
+  scale_fill_viridis_c()
 ```
 
-Page 5
+### SSM
+
+```{r}
+just <-
+  get_tidy_audio_analysis("1dyTcli07c77mtQK3ahUZR") |> # Change URI.
+  compmus_align(bars, segments) |>                     # Change `bars`
+  select(bars) |>                                      #   in all three
+  unnest(bars) |>                                      #   of these lines.
+  mutate(
+    pitches =
+      map(segments,
+        compmus_summarise, pitches,
+        method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  ) |>
+  mutate(
+    timbre =
+      map(segments,
+        compmus_summarise, timbre,
+        method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  )
+
+just |>
+  compmus_self_similarity(timbre, "cosine") |> 
+  ggplot(
+    aes(
+      x = xstart + xduration / 2,
+      width = xduration,
+      y = ystart + yduration / 2,
+      height = yduration,
+      fill = d
+    )
+  ) +
+  geom_tile() +
+  coord_fixed() +
+  scale_fill_viridis_c(guide = "none") +
+  theme_classic() +
+  labs(x = "", y = "")
+```
+
+# Chart 3 {data-navmenu="Page 3"}
+
+Sidebar {.sidebar}
+-------------------------------------  
+
+Arguably the most Bond-esque sounding track in the band's entire discography , besides the one they actually wrote for 2016's Spectre (the track is aptly named Spectre as well), which sadly got scrapped. It is arguably the most 'generic' track I chose for this part of the project, simply because the structure is most recognisable in other popular songs. The song has two motifs, of which the first is the simple riff heard in the beginning of the track. This motif is present in the song until around 2 minutes in. The second riff comes in just before the 2 minute mark and repeatedly appears in various forms for the rest of the song. Possibly, this use of similar riffs causes some confusion in the Self-Similarity Matrix, which is uncharacteristically vague for this track. This shows that, although a Self-Similarity Matrix and Chromagram on their own often provide ample information on a track, when you combine the two, that's when you really get to know a song. Following from this statement, the chromatic structure of this track is easily found out from the Chromagram, which is almost entirely well-defined. 
+
+Column {.tabset}
+------------------------------------- 
+
+### Chromagram
+
+```{r}
+manofwar <-
+  get_tidy_audio_analysis("5HtNvKihacAXt34DDYYxBC") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
+
+manofwar |>
+  mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |>
+  compmus_gather_chroma() |> 
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = pitch_class,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title="Man of War") +
+  theme_minimal() +
+  scale_fill_viridis_c()
+```
+
+### SSM
+
+```{r}
+manofwar <-
+  get_tidy_audio_analysis("5HtNvKihacAXt34DDYYxBC") |> # Change URI.
+  compmus_align(bars, segments) |>                     # Change `bars`
+  select(bars) |>                                      #   in all three
+  unnest(bars) |>                                      #   of these lines.
+  mutate(
+    pitches =
+      map(segments,
+        compmus_summarise, pitches,
+        method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  ) |>
+  mutate(
+    timbre =
+      map(segments,
+        compmus_summarise, timbre,
+        method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  )
+
+manofwar |>
+  compmus_self_similarity(timbre, "cosine") |> 
+  ggplot(
+    aes(
+      x = xstart + xduration / 2,
+      width = xduration,
+      y = ystart + yduration / 2,
+      height = yduration,
+      fill = d
+    )
+  ) +
+  geom_tile() +
+  coord_fixed() +
+  scale_fill_viridis_c(guide = "none") +
+  theme_classic() +
+  labs(x = "", y = "")
+```
+
+# Chart 4 {data-navmenu="Page 3"}
+
+Sidebar {.sidebar}
+-------------------------------------  
+
+Looking back at the introductory visualisation of my project on the Kid A Mnesiac chart, the valence and energy of this piece are among the lowest of the entire album, and with that, the band's full discography, making this one of the band's most melancholic pieces. The instruments in this piece flow beautifully, which, unfortunately, also means that the corresponding Self-Similarity Matrix is looking a bit fuzzy. There are, however, still four clearly defined sections in this song. The first square in the matrix represents the solemn organ sound that is heard in the first 40 seconds of the piece. After this, Thom Yorke's voice appears, resulting in a new part of the matrix. This is followed by a brief silence, after which the same pattern continues, but now with a sweeping harp sound in the background. The final section of the song contains something that almost sounds like a choir from the heavens and then gradually fades into silence with the harp as the last remaining instrument. 
+
+Column {.tabset}
+------------------------------------- 
+
+### Chromagram
+
+```{r}
+motionpicture <-
+  get_tidy_audio_analysis("5RxiwMqRNyPYjJTobU65UT") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
+
+motionpicture |>
+  mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |>
+  compmus_gather_chroma() |> 
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = pitch_class,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title="Motion Picture Soundtrack") +
+  theme_minimal() +
+  scale_fill_viridis_c()
+```
+
+### SSM
+
+```{r}
+motionpicture <-
+  get_tidy_audio_analysis("5RxiwMqRNyPYjJTobU65UT") |> # Change URI.
+  compmus_align(bars, segments) |>                     # Change `bars`
+  select(bars) |>                                      #   in all three
+  unnest(bars) |>                                      #   of these lines.
+  mutate(
+    pitches =
+      map(segments,
+        compmus_summarise, pitches,
+        method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  ) |>
+  mutate(
+    timbre =
+      map(segments,
+        compmus_summarise, timbre,
+        method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  )
+
+motionpicture |>
+  compmus_self_similarity(timbre, "cosine") |> 
+  ggplot(
+    aes(
+      x = xstart + xduration / 2,
+      width = xduration,
+      y = ystart + yduration / 2,
+      height = yduration,
+      fill = d
+    )
+  ) +
+  geom_tile() +
+  coord_fixed() +
+  scale_fill_viridis_c(guide = "none") +
+  theme_classic() +
+  labs(x = "", y = "")
+```
+
+# Chart 5 {data-navmenu="Page 3"}
+
+Sidebar {.sidebar}
+-------------------------------------  
+
+This track contains
+
+Column {.tabset}
+------------------------------------- 
+
+### Chromagram
+
+```{r}
+wolf <-
+  get_tidy_audio_analysis("3OHevW2cUT176DXWV0lHg9") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
+
+wolf |>
+  mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |>
+  compmus_gather_chroma() |> 
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = pitch_class,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title="A Wolf At the Door") +
+  theme_minimal() +
+  scale_fill_viridis_c()
+```
+
+### SSM
+
+```{r}
+wolf <-
+  get_tidy_audio_analysis("3OHevW2cUT176DXWV0lHg9") |> # Change URI.
+  compmus_align(bars, segments) |>                     # Change `bars`
+  select(bars) |>                                      #   in all three
+  unnest(bars) |>                                      #   of these lines.
+  mutate(
+    pitches =
+      map(segments,
+        compmus_summarise, pitches,
+        method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  ) |>
+  mutate(
+    timbre =
+      map(segments,
+        compmus_summarise, timbre,
+        method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  )
+
+wolf |>
+  compmus_self_similarity(timbre, "cosine") |> 
+  ggplot(
+    aes(
+      x = xstart + xduration / 2,
+      width = xduration,
+      y = ystart + yduration / 2,
+      height = yduration,
+      fill = d
+    )
+  ) +
+  geom_tile() +
+  coord_fixed() +
+  scale_fill_viridis_c(guide = "none") +
+  theme_classic() +
+  labs(x = "", y = "")
+```
+
+# Chart 6 {data-navmenu="Page 3"}
+
+Sidebar {.sidebar}
+-------------------------------------  
+
+The first track, Blow Out, although 
+
+Column {.tabset}
+------------------------------------- 
+
+### Chromagram
+
+```{r}
+weirdfishes <-
+  get_tidy_audio_analysis("4wajJ1o7jWIg62YqpkHC7S") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
+
+weirdfishes |>
+  mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |>
+  compmus_gather_chroma() |> 
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = pitch_class,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title="Weird Fishes/Arpeggi") +
+  theme_minimal() +
+  scale_fill_viridis_c()
+```
+
+### SSM
+
+```{r}
+weirdfishes <-
+  get_tidy_audio_analysis("4wajJ1o7jWIg62YqpkHC7S") |> # Change URI.
+  compmus_align(bars, segments) |>                     # Change `bars`
+  select(bars) |>                                      #   in all three
+  unnest(bars) |>                                      #   of these lines.
+  mutate(
+    pitches =
+      map(segments,
+        compmus_summarise, pitches,
+        method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  ) |>
+  mutate(
+    timbre =
+      map(segments,
+        compmus_summarise, timbre,
+        method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  )
+
+weirdfishes |>
+  compmus_self_similarity(timbre, "cosine") |> 
+  ggplot(
+    aes(
+      x = xstart + xduration / 2,
+      width = xduration,
+      y = ystart + yduration / 2,
+      height = yduration,
+      fill = d
+    )
+  ) +
+  geom_tile() +
+  coord_fixed() +
+  scale_fill_viridis_c(guide = "none") +
+  theme_classic() +
+  labs(x = "", y = "")
+```
+
+# Chart 7 {data-navmenu="Page 3"}
+
+Sidebar {.sidebar}
+-------------------------------------  
+
+The first track, Blow Out, although 
+
+Column {.tabset}
+------------------------------------- 
+
+### Chromagram
+
+```{r}
+littlebylittle <-
+  get_tidy_audio_analysis("1R5qCDSE1XEiSDMkA0LAhf") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
+
+littlebylittle |>
+  mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |>
+  compmus_gather_chroma() |> 
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = pitch_class,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title="Little by Little") +
+  theme_minimal() +
+  scale_fill_viridis_c()
+```
+
+### SSM
+
+```{r}
+littlebylittle <-
+  get_tidy_audio_analysis("1R5qCDSE1XEiSDMkA0LAhf") |> # Change URI.
+  compmus_align(bars, segments) |>                     # Change `bars`
+  select(bars) |>                                      #   in all three
+  unnest(bars) |>                                      #   of these lines.
+  mutate(
+    pitches =
+      map(segments,
+        compmus_summarise, pitches,
+        method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  ) |>
+  mutate(
+    timbre =
+      map(segments,
+        compmus_summarise, timbre,
+        method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  )
+
+littlebylittle |>
+  compmus_self_similarity(timbre, "cosine") |> 
+  ggplot(
+    aes(
+      x = xstart + xduration / 2,
+      width = xduration,
+      y = ystart + yduration / 2,
+      height = yduration,
+      fill = d
+    )
+  ) +
+  geom_tile() +
+  coord_fixed() +
+  scale_fill_viridis_c(guide = "none") +
+  theme_classic() +
+  labs(x = "", y = "")
+```
+
+# Chart 8 {data-navmenu="Page 3"}
+
+Sidebar {.sidebar}
+-------------------------------------  
+
+
+Column {.tabset}
+------------------------------------- 
+
+### Chromagram
+
+```{r}
+fulstop <-
+  get_tidy_audio_analysis("6nOsTV3cMjLh3k6Wpk468L") |>
+  select(segments) |>
+  unnest(segments) |>
+  select(start, duration, pitches)
+
+fulstop |>
+  mutate(pitches = map(pitches, compmus_normalise, "euclidean")) |>
+  compmus_gather_chroma() |> 
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = pitch_class,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude", title="Ful Stop") +
+  theme_minimal() +
+  scale_fill_viridis_c()
+```
+
+### SSM
+
+```{r}
+fulstop <-
+  get_tidy_audio_analysis("6nOsTV3cMjLh3k6Wpk468L") |> # Change URI.
+  compmus_align(bars, segments) |>                     # Change `bars`
+  select(bars) |>                                      #   in all three
+  unnest(bars) |>                                      #   of these lines.
+  mutate(
+    pitches =
+      map(segments,
+        compmus_summarise, pitches,
+        method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  ) |>
+  mutate(
+    timbre =
+      map(segments,
+        compmus_summarise, timbre,
+        method = "rms", norm = "euclidean"              # Change summary & norm.
+      )
+  )
+
+fulstop |>
+  compmus_self_similarity(timbre, "cosine") |> 
+  ggplot(
+    aes(
+      x = xstart + xduration / 2,
+      width = xduration,
+      y = ystart + yduration / 2,
+      height = yduration,
+      fill = d
+    )
+  ) +
+  geom_tile() +
+  coord_fixed() +
+  scale_fill_viridis_c(guide = "none") +
+  theme_classic() +
+  labs(x = "", y = "")
+```
+
+
+Page 4
 =====================================     
 
 Sidebar {.sidebar}
@@ -722,77 +1186,196 @@ Column {.tabset}
 ### Chart 1
 
 ```{r}
-pablo <-
-  get_playlist_audio_features(
-    "",
-    "0rllYNwldDnjrOGx03VMnc"
-  ) |>
-  add_audio_analysis()
-moon <-
-  get_playlist_audio_features(
-    "",
-    "5o9KFQJ6uxvaGCihXtxSMv"
-  ) |>
-  add_audio_analysis()
-pablomoon <-
-  pablo |>
-  mutate(genre = "Pablo Honey") |>
-  bind_rows(moon |> mutate(genre = "A Moon Shaped Pool"))
+# radiohead <- bind_rows(pablohoney, thebends, okcomputer, kidamnesiac, hailtothethief, inrainbows, thekingoflimbs, amoonshapedpool)
 
-pablomoon |>
-  mutate(
-    sections =
-      map(
-        sections,                                    # sections or segments
-        summarise_at,
-        vars(tempo, loudness, duration),             # features of interest
-        list(section_mean = mean, section_sd = sd)   # aggregation functions
-      )
-  ) |>
-  unnest(sections) |>
-  ggplot(
-    aes(
-      x = tempo,
-      y = tempo_section_sd,
-      colour = genre,
-      alpha = loudness
-    )
-  ) +
-  geom_point(aes(size = duration / 60)) +
-  geom_rug() +
-  theme_minimal() +
-  ylim(0, 5) +
-  labs(
-    x = "Mean Tempo (bpm)",
-    y = "SD Tempo",
-    colour = "Album",
-    size = "Duration (min)",
-    alpha = "Volume (dBFS)"
-  )
+radiohead1 <- bind_rows(pablohoney, thebends, okcomputer)
+radiohead2 <- bind_rows(kidamnesiac, hailtothethief)
+radiohead3 <- bind_rows(inrainbows, thekingoflimbs, amoonshapedpool)
+```   
+
+```{r}
+# radiohead1 |>
+#   mutate(
+#     sections =
+#       map(
+#         sections,                                    # sections or segments
+#         summarise_at,
+#         vars(tempo, loudness, duration),             # features of interest
+#         list(section_mean = mean, section_sd = sd)   # aggregation functions
+#       )
+#   ) |>
+#   unnest(sections) |>
+#   ggplot(
+#     aes(
+#       x = tempo,
+#       y = tempo_section_sd,
+#       colour = playlist_name,
+#       alpha = loudness
+#     )
+#   ) +
+#   geom_point(aes(size = duration / 60)) +
+#   geom_rug() +
+#   theme_minimal() +
+#   ylim(0, 5) +
+#   labs(
+#     x = "Mean Tempo (bpm)",
+#     y = "SD Tempo",
+#     colour = "Album",
+#     size = "Duration (min)",
+#     alpha = "Volume (dBFS)"
+#   )
+# 
+# radiohead2 |>
+#   mutate(
+#     sections =
+#       map(
+#         sections,                                    # sections or segments
+#         summarise_at,
+#         vars(tempo, loudness, duration),             # features of interest
+#         list(section_mean = mean, section_sd = sd)   # aggregation functions
+#       )
+#   ) |>
+#   unnest(sections) |>
+#   ggplot(
+#     aes(
+#       x = tempo,
+#       y = tempo_section_sd,
+#       colour = playlist_name,
+#       alpha = loudness
+#     )
+#   ) +
+#   geom_point(aes(size = duration / 60)) +
+#   geom_rug() +
+#   theme_minimal() +
+#   ylim(0, 5) +
+#   labs(
+#     x = "Mean Tempo (bpm)",
+#     y = "SD Tempo",
+#     colour = "Album",
+#     size = "Duration (min)",
+#     alpha = "Volume (dBFS)"
+#   )
+# 
+# radiohead3 |>
+#   mutate(
+#     sections =
+#       map(
+#         sections,                                    # sections or segments
+#         summarise_at,
+#         vars(tempo, loudness, duration),             # features of interest
+#         list(section_mean = mean, section_sd = sd)   # aggregation functions
+#       )
+#   ) |>
+#   unnest(sections) |>
+#   ggplot(
+#     aes(
+#       x = tempo,
+#       y = tempo_section_sd,
+#       colour = playlist_name,
+#       alpha = loudness
+#     )
+#   ) +
+#   geom_point(aes(size = duration / 60)) +
+#   geom_rug() +
+#   theme_minimal() +
+#   ylim(0, 5) +
+#   labs(
+#     x = "Mean Tempo (bpm)",
+#     y = "SD Tempo",
+#     colour = "Album",
+#     size = "Duration (min)",
+#     alpha = "Volume (dBFS)"
+#   )
 ```
 
 ### Chart 2
 
 ```{r}
-pablomoon |>
-  mutate(
-    timbre =
-      map(
-        segments,
-        compmus_summarise,
-        timbre,
-        method = "mean"
-      )
-  ) |>
-  select(genre, timbre) |>
-  compmus_gather_timbre() |>
-  ggplot(aes(x = basis, y = value, fill = genre)) +
-  geom_violin() +
-  scale_fill_viridis_d() +
-  labs(x = "Spotify Timbre Coefficients", y = "", fill = "Album")
-```   
-    
-### Chart 3
+# radiohead1 |>
+#   mutate(
+#     timbre =
+#       map(
+#         segments,
+#         compmus_summarise,
+#         timbre,
+#         method = "mean"
+#       )
+#   ) |>
+#   select(playlist_name, timbre) |>
+#   compmus_gather_timbre() |>
+#   ggplot(aes(x = basis, y = value, fill = playlist_name)) +
+#   geom_violin() +
+#   scale_fill_viridis_d() +
+#   labs(x = "Spotify Timbre Coefficients", y = "", fill = "Album")
+# 
+# radiohead2 |>
+#   mutate(
+#     timbre =
+#       map(
+#         segments,
+#         compmus_summarise,
+#         timbre,
+#         method = "mean"
+#       )
+#   ) |>
+#   select(playlist_name, timbre) |>
+#   compmus_gather_timbre() |>
+#   ggplot(aes(x = basis, y = value, fill = playlist_name)) +
+#   geom_violin() +
+#   scale_fill_viridis_d() +
+#   labs(x = "Spotify Timbre Coefficients", y = "", fill = "Album")
+# 
+# radiohead3 |>
+#   mutate(
+#     timbre =
+#       map(
+#         segments,
+#         compmus_summarise,
+#         timbre,
+#         method = "mean"
+#       )
+#   ) |>
+#   select(playlist_name, timbre) |>
+#   compmus_gather_timbre() |>
+#   ggplot(aes(x = basis, y = value, fill = playlist_name)) +
+#   geom_violin() +
+#   scale_fill_viridis_d() +
+#   labs(x = "Spotify Timbre Coefficients", y = "", fill = "Album")
+```
+
+Page 5
+=====================================     
+
+Sidebar {.sidebar}
+-------------------------------------  
+
+When discussing the complexity of Radiohead songs, one song in particular never fails to be mentioned: Paranoid Android. This song contains significant tempo changes that are pulled off very well, hopefully also making them visible in the tempogram. Most sources online tell that this song has a BPM of around 84. That's how the song starts out at least. After around 3 and a half minutes, the tempo slows down to around 63 BPM, before returning to it's original state for the final section of the song. This is represented in a somewhat vague way in the tempogram, so let me explain. The yellow lines around 330 and 250 BPM are multiples of the original tempo's of the song: 84 and 62 BPM. This is figured out in the second visualization, where the first tempo is correct, but the second tempo is still visualized in double-time. The coda of this piece is presumably a mystery to the computer, as there is no clear yellow line visible in this part.
+
+Column {.tabset}
+-------------------------------------
+
+### Chart 1
 
 ```{r}
+# paranoid |>
+#   tempogram(window_size = 8, hop_size = 1, cyclic = TRUE) |>
+#   ggplot(aes(x = time, y = bpm, fill = power)) +
+#   geom_raster() +
+#   scale_fill_viridis_c(guide = "none") +
+#   labs(x = "Time (s)", y = "Tempo (BPM)") +
+#   theme_classic()
+```   
+
+### Chart 2
+
+```{r}
+# paranoid <- get_tidy_audio_analysis("6LgJvl0Xdtc73RJ1mmpotq")
+# 
+# paranoid |>
+#   tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
+#   ggplot(aes(x = time, y = bpm, fill = power)) +
+#   geom_raster() +
+#   scale_fill_viridis_c(guide = "none") +
+#   labs(x = "Time (s)", y = "Tempo (BPM)") +
+#   theme_classic()
 ```
